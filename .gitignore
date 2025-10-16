@@ -141,5 +141,5 @@ vite.config.ts.timestamp-*
 # Wrangler
 .wrangler/
 
-# Turbo
-.turbo/
+# Local DB
+*.sqlite

@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router';
-import { ArrowLeft, FileQuestion, Home, Search } from 'lucide-react';
+import { ArrowLeft, FileQuestion, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 
@@ -47,13 +47,8 @@ export function NotFound({ children }: { children?: React.ReactNode }) {
             </div>
 
             {/* Help text */}
-            <div className="w-full border-t pt-4">
-              <div className="flex items-center justify-center gap-2 text-muted-foreground text-sm">
-                <Search className="h-4 w-4" />
-                <span>
-                  Try checking the URL or use the search functionality
-                </span>
-              </div>
+            <div className="w-full border-t pt-4 text-muted-foreground text-sm">
+              Try checking the URL
             </div>
           </div>
         </CardContent>

@@ -9,7 +9,7 @@ export const createBetterAuth = (config: {
     database: config.database,
     secret: config.secret,
     emailAndPassword: {
-      enabled: false,
+      enabled: true,
     },
     socialProviders: config.socialProviders,
     user: {
@@ -23,6 +23,10 @@ export const createBetterAuth = (config: {
     },
     account: {
       modelName: 'auth_account',
+      accountLinking: {
+        enabled: true,
+        trustedProviders: ['google'],
+      },
     },
   });
 };

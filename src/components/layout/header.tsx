@@ -1,82 +1,132 @@
-import { Bell, Menu, Search } from 'lucide-react';
-import { useState } from 'react';
-import { AccountDialog } from '@/components/auth/account-dialog';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Link } from '@tanstack/react-router';
+import { Github, Menu } from 'lucide-react';
+import React from 'react';
+import { ModeToggle } from '@/components/theme/mode-toggle';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { authClient } from '@/lib/auth/client';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import { siteConfig } from '@/config/site';
 import { cn } from '@/lib/utils';
 
-type HeaderProps = {
-  className?: string;
-  onMobileMenuToggle?: () => void;
-};
+export const HeroHeader = () => {
+  const [isScrolled, setIsScrolled] = React.useState(false);
 
-export function Header({ className, onMobileMenuToggle }: HeaderProps) {
-  const [searchQuery, setSearchQuery] = useState('');
-  const { data: session } = authClient.useSession();
-
-  const user = session?.user;
-  const fallbackText = user?.name
-    ? user.name.charAt(0).toUpperCase()
-    : user?.email?.charAt(0).toUpperCase() || 'U';
+  React.useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
-    <header
-      className={cn(
-        'flex h-16 items-center justify-between border-border border-b bg-background px-6',
-        className
-      )}
-    >
-      {/* Left side - Mobile menu button and search */}
-      <div className="flex items-center gap-4">
-        <Button
-          className="lg:hidden"
-          onClick={onMobileMenuToggle}
-          size="icon"
-          variant="ghost"
+    <header>
+      <nav className="fixed z-20 w-full px-2">
+        <div
+          className={cn(
+            'mx-auto mt-2 max-w-6xl px-6 transition-all duration-300 lg:px-12',
+            isScrolled &&
+              'max-w-5xl rounded-2xl border bg-background/80 backdrop-blur-lg lg:px-5'
+          )}
         >
-          <Menu className="h-5 w-5" />
-        </Button>
-
-        <div className="relative">
-          <Search className="-translate-y-1/2 absolute top-1/2 left-3 h-4 w-4 text-muted-foreground" />
-          <Input
-            className="w-64 border-0 bg-muted/50 pl-9 focus-visible:ring-1 focus-visible:ring-ring"
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search..."
-            value={searchQuery}
-          />
-        </div>
-      </div>
-
-      {/* Right side - Notifications and user menu */}
-      <div className="flex items-center gap-2">
-        <Button className="relative" size="icon" variant="ghost">
-          <Bell className="h-5 w-5" />
-          <span className="-top-1 -right-1 absolute h-3 w-3 rounded-full bg-destructive" />
-        </Button>
-
-        <AccountDialog>
-          <Button className="flex items-center gap-2 px-3" variant="ghost">
-            <Avatar className="h-8 w-8">
-              <AvatarImage
-                alt={user?.name || 'User'}
-                src={user?.image || undefined}
+          <div className="flex items-center justify-between gap-6 py-3 lg:py-4">
+            {/* Logo - Fixed position, won't shift */}
+            <Link
+              aria-label="home"
+              className="flex flex-shrink-0 items-center space-x-2"
+              to="/"
+            >
+              <img
+                alt={siteConfig.name}
+                className="h-10 w-10"
+                height={40}
+                src={siteConfig.logo}
+                width={40}
               />
-              <AvatarFallback className="bg-primary text-primary-foreground text-sm">
-                {fallbackText}
-              </AvatarFallback>
-            </Avatar>
-            <div className="hidden flex-col items-start sm:flex">
-              <span className="font-medium text-sm">
-                {user?.name || 'User'}
-              </span>
-              <span className="text-muted-foreground text-xs">Online</span>
+              <span className="font-semibold text-lg">{siteConfig.name}</span>
+            </Link>
+
+            {/* Desktop Navigation */}
+            <div className="hidden items-center gap-3 lg:flex">
+              <Button asChild size="sm" variant="ghost">
+                <a
+                  href={`https://github.com/${siteConfig.social.github}`}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  <Github className="mr-2 h-4 w-4" />
+                  <span>GitHub</span>
+                </a>
+              </Button>
+              <ModeToggle />
+              <div className="h-4 w-px bg-border" />
+              <Button asChild size="sm" variant="outline">
+                <Link to="/auth/login">
+                  <span>Login</span>
+                </Link>
+              </Button>
+              <Button asChild size="sm">
+                <Link to="/auth/register">
+                  <span>Get Started</span>
+                </Link>
+              </Button>
             </div>
-          </Button>
-        </AccountDialog>
-      </div>
+
+            {/* Mobile Navigation - Using Popover */}
+            <div className="lg:hidden">
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button aria-label="Open Menu" size="sm" variant="ghost">
+                    <Menu className="h-5 w-5" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent align="end" className="w-64 p-4" sideOffset={8}>
+                  <div className="flex flex-col space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="font-medium text-sm">Theme</span>
+                      <ModeToggle />
+                    </div>
+                    <div className="h-px bg-border" />
+                    <Button
+                      asChild
+                      className="w-full"
+                      size="sm"
+                      variant="outline"
+                    >
+                      <Link to="/auth/login">
+                        <span>Login</span>
+                      </Link>
+                    </Button>
+                    <Button asChild className="w-full" size="sm">
+                      <Link to="/auth/register">
+                        <span>Get Started</span>
+                      </Link>
+                    </Button>
+                    <Button
+                      asChild
+                      className="w-full"
+                      size="sm"
+                      variant="outline"
+                    >
+                      <a
+                        href={`https://github.com/${siteConfig.social.github}`}
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <Github className="mr-2 h-4 w-4" />
+                        <span>GitHub</span>
+                      </a>
+                    </Button>
+                  </div>
+                </PopoverContent>
+              </Popover>
+            </div>
+          </div>
+        </div>
+      </nav>
     </header>
   );
-}
+};

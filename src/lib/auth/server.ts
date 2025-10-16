@@ -4,8 +4,8 @@ import {
   auth_session,
   auth_user,
   auth_verification,
-} from '../db/auth-schema';
-import type { getDb } from '../db/setup';
+} from '@/lib/db/auth-schema';
+import type { getDb } from '@/lib/db/setup';
 import { createBetterAuth } from './setup';
 
 let betterAuth: ReturnType<typeof createBetterAuth>;

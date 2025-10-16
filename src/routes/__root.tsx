@@ -12,7 +12,7 @@ import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 import type * as React from 'react';
 import { DefaultCatchBoundary } from '@/components/default-catch-boundary';
 import { NotFound } from '@/components/not-found';
-import { ThemeProvider } from '@/components/theme';
+import { ThemeProvider } from '@/components/theme/provider';
 import appCss from '@/styles.css?url';
 import { seo } from '@/utils/seo';
 
@@ -29,10 +29,9 @@ export const Route = createRootRouteWithContext<{
         content: 'width=device-width, initial-scale=1',
       },
       ...seo({
-        title:
-          'TanStack Start | Type-Safe, Client-First, Full-Stack React Framework',
+        title: 'Warewise | Smart Business Management Made Simple',
         description:
-          'TanStack Start is a type-safe, client-first, full-stack React framework. ',
+          'Complete inventory management solution for small Indian businesses with vendor management, billing, POS, customer management and accounting',
       }),
     ],
     links: [
