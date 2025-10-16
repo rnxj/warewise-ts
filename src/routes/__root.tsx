@@ -9,16 +9,23 @@ import {
   Scripts,
 } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
+import type { TRPCOptionsProxy } from '@trpc/tanstack-react-query';
 import type * as React from 'react';
+import type { AppRouter } from '@/api/routers/index';
 import { DefaultCatchBoundary } from '@/components/default-catch-boundary';
 import { NotFound } from '@/components/not-found';
 import { ThemeProvider } from '@/components/theme/provider';
+import type { authClient } from '@/lib/auth/client';
 import appCss from '@/styles.css?url';
 import { seo } from '@/utils/seo';
 
-export const Route = createRootRouteWithContext<{
+export interface RouterAppContext {
+  trpc: TRPCOptionsProxy<AppRouter>;
   queryClient: QueryClient;
-}>()({
+  authClient: typeof authClient;
+}
+
+export const Route = createRootRouteWithContext<RouterAppContext>()({
   head: () => ({
     meta: [
       {
@@ -85,7 +92,7 @@ function RootComponent() {
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>

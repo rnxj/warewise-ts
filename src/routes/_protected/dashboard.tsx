@@ -1,5 +1,5 @@
+import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
-import { authClient } from '@/lib/auth/client';
 
 export const Route = createFileRoute('/_protected/dashboard')({
   component: RouteComponent,
@@ -13,7 +13,12 @@ export const Route = createFileRoute('/_protected/dashboard')({
 });
 
 function RouteComponent() {
+  const { authClient, trpc } = Route.useRouteContext();
   const { data: session } = authClient.useSession();
+
+  const { data: privateData, isLoading } = useQuery(
+    trpc.privateData.queryOptions()
+  );
 
   return (
     <div className="container mx-auto p-4 md:p-6">
@@ -25,6 +30,20 @@ function RouteComponent() {
             Welcome back, {session?.user.name}
           </p>
         </div>
+      </div>
+
+      {/* tRPC Private Data */}
+      <div className="mt-6 rounded-lg border p-4">
+        <h2 className="mb-2 font-semibold text-lg">Private Data from tRPC</h2>
+        {isLoading ? (
+          <p>Loading...</p>
+        ) : (
+          <div>
+            <p className="text-muted-foreground text-sm">
+              {privateData?.message}
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
