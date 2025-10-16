@@ -1,0 +1,39 @@
+// DO NOT DELETE THIS FILE!!!
+// This file is a good smoke test to make sure the custom server entry is working
+
+import handler from '@tanstack/react-start/server-entry';
+import { setAuth } from '@/lib/auth/server';
+import { initDatabase } from '@/lib/db/setup';
+
+export default {
+  fetch(
+    request: Request,
+    env: {
+      DB: D1Database;
+      BETTER_AUTH_SECRET: string;
+      GOOGLE_CLIENT_ID: string;
+      GOOGLE_CLIENT_SECRET: string;
+    }
+  ) {
+    const db = initDatabase(env.DB);
+
+    setAuth({
+      secret: env.BETTER_AUTH_SECRET,
+      socialProviders: {
+        google: {
+          clientId: env.GOOGLE_CLIENT_ID,
+          clientSecret: env.GOOGLE_CLIENT_SECRET,
+        },
+      },
+      adapter: {
+        drizzleDb: db,
+        provider: 'sqlite',
+      },
+    });
+    return handler.fetch(request, {
+      context: {
+        fromFetch: true,
+      },
+    });
+  },
+};

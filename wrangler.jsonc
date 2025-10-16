@@ -1,0 +1,19 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "tanstack-start-app",
+  "compatibility_date": "2025-09-02",
+  "compatibility_flags": ["nodejs_compat"],
+  "main": "./src/server.ts",
+  "vars": {
+    "MY_VAR": "Hello from Cloudflare"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "warewise-db",
+      "database_id": "50347ed3-036c-4762-ba91-36c640aaec11",
+      "preview_database_id": "local-test-db",
+      "migrations_dir": "./src/lib/db/migrations"
+    }
+  ]
+}
