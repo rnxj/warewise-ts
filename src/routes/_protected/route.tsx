@@ -52,8 +52,8 @@ function ProtectedLayout() {
     >
       <AppSidebar variant="floating" />
       <SidebarInset>
-        <header className="sticky top-0 z-10 flex h-12 shrink-0 items-center justify-between gap-2 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-          <div className="flex items-center gap-2 px-4">
+        <header className="sticky top-0 z-[5] ml-2 flex h-12 shrink-0 items-center justify-between gap-2 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+          <div className="flex items-center gap-2 px-4 md:px-2">
             <SidebarTrigger className="-ml-1 mr-2" />
             <RouteBreadcrumb />
           </div>

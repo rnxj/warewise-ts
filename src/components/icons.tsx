@@ -47,3 +47,35 @@ export const Google = (props: SVGProps<SVGSVGElement>) => {
     </svg>
   );
 };
+
+export const SidebarToggle = (
+  props: SVGProps<SVGSVGElement> & { state?: 'expanded' | 'collapsed' }
+) => {
+  const { state, className, ...svgProps } = props;
+
+  return (
+    <svg
+      className={`sidebar-icon-trigger text-subdued ${className || ''}`}
+      fill="currentColor"
+      height="20"
+      viewBox="0 0 16 16"
+      width="20"
+      xmlns="http://www.w3.org/2000/svg"
+      {...svgProps}
+    >
+      <title>Toggle Sidebar</title>
+      <path d="M14 2a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1zM2 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2z" />
+      <rect
+        className={`transition-all duration-150 ease-in-out ${
+          state === 'expanded'
+            ? 'w-[6px] group-hover:w-[3px]'
+            : 'w-[3px] group-hover:w-[6px]'
+        }`}
+        height="10"
+        rx="1"
+        x="2"
+        y="3"
+      />
+    </svg>
+  );
+};
