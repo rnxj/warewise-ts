@@ -52,6 +52,16 @@
           }
         }
       }
+    },
+    {
+      "includes": ["scripts/load-secrets.ts"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noConsole": "off"
+          }
+        }
+      }
     }
   ]
 }
