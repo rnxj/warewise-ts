@@ -15,42 +15,42 @@ import { authClient } from '@/lib/auth/client';
 import { TRPCProvider } from '@/lib/trpc';
 import { routeTree } from '@/routeTree.gen';
 
-export const queryClient = new QueryClient({
-  queryCache: new QueryCache({
-    onError: (error) => {
-      toast.error(error.message, {
-        action: {
-          label: 'Retry',
-          onClick: () => {
-            queryClient.invalidateQueries();
+export const getRouter = () => {
+  const queryClient = new QueryClient({
+    queryCache: new QueryCache({
+      onError: (error) => {
+        toast.error(error.message, {
+          action: {
+            label: 'Retry',
+            onClick: () => {
+              queryClient.invalidateQueries();
+            },
           },
-        },
-      });
-    },
-  }),
-  defaultOptions: { queries: { staleTime: 60 * 1000 } },
-});
-
-const trpcClient = createTRPCClient<AppRouter>({
-  links: [
-    httpBatchLink({
-      url: '/api/trpc',
-      fetch(url, options) {
-        return fetch(url, {
-          ...options,
-          credentials: 'include',
         });
       },
     }),
-  ],
-});
+    defaultOptions: { queries: { staleTime: 60 * 1000 } },
+  });
 
-const trpc = createTRPCOptionsProxy({
-  client: trpcClient,
-  queryClient,
-});
+  const trpcClient = createTRPCClient<AppRouter>({
+    links: [
+      httpBatchLink({
+        url: '/api/trpc',
+        fetch(url, options) {
+          return fetch(url, {
+            ...options,
+            credentials: 'include',
+          });
+        },
+      }),
+    ],
+  });
 
-export const getRouter = () => {
+  const trpc = createTRPCOptionsProxy({
+    client: trpcClient,
+    queryClient,
+  });
+
   const router = createRouter({
     routeTree,
     scrollRestoration: true,
