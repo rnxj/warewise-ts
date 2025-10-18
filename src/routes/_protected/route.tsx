@@ -1,9 +1,10 @@
 import {
   createFileRoute,
   Outlet,
-  redirect,
   useRouterState,
 } from '@tanstack/react-router';
+import { createServerFn } from '@tanstack/react-start';
+import { getCookie } from '@tanstack/react-start/server';
 import { AppSidebar } from '@/components/layout/app-sidebar';
 import Loader from '@/components/layout/loader';
 import { RouteBreadcrumb } from '@/components/layout/route-breadcrumb';
@@ -14,31 +15,26 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from '@/components/ui/sidebar';
-import { authClient } from '@/lib/auth/client';
-import { getCookie, parseCookieValue } from '@/lib/cookies';
+import { protectedRouteMiddleware } from '@/core/middleware/auth';
+
+const getSidebarState = createServerFn().handler(() => {
+  const sidebarCookie = getCookie('sidebar_state');
+  return {
+    sidebarState: sidebarCookie === 'true',
+  };
+});
 
 export const Route = createFileRoute('/_protected')({
-  beforeLoad: async ({ location }) => {
-    const session = await authClient.getSession();
-
-    if (!session.data?.user) {
-      throw redirect({
-        to: '/auth/login',
-        search: {
-          redirect: location.href,
-        },
-      });
-    }
+  server: {
+    middleware: [protectedRouteMiddleware],
   },
+  loader: () => getSidebarState(),
   component: ProtectedLayout,
   notFoundComponent: () => <NotFound />,
-  ssr: false,
 });
 
 function ProtectedLayout() {
-  // Read the sidebar state from cookie
-  const sidebarCookie = getCookie('sidebar_state');
-  const defaultOpen = parseCookieValue(sidebarCookie);
+  const { sidebarState } = Route.useLoaderData();
 
   const isFetching = useRouterState({
     select: (s) => s.isLoading,
@@ -46,7 +42,7 @@ function ProtectedLayout() {
 
   return (
     <SidebarProvider
-      defaultOpen={defaultOpen}
+      defaultOpen={sidebarState}
       style={
         {
           '--sidebar-width': 'calc(var(--spacing) * 72)',

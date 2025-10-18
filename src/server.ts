@@ -30,10 +30,6 @@ export default {
         provider: 'sqlite',
       },
     });
-    return handler.fetch(request, {
-      context: {
-        fromFetch: true,
-      },
-    });
+    return handler.fetch(request, {});
   },
 };
