@@ -20,14 +20,20 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { authClient } from '@/lib/auth/client';
 
 export function NavUser() {
-  const { isMobile } = useSidebar();
+  const { isMobile, state } = useSidebar();
   const { data: session, isPending } = authClient.useSession();
 
   if (isPending) {
     return (
       <SidebarMenu>
         <SidebarMenuItem>
-          <Skeleton className="h-12 w-full rounded-lg" />
+          <Skeleton
+            className={
+              state === 'collapsed'
+                ? 'h-8 w-8 rounded-lg'
+                : 'h-12 w-full rounded-lg'
+            }
+          />
         </SidebarMenuItem>
       </SidebarMenu>
     );
