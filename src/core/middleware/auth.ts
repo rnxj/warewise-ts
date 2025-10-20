@@ -66,16 +66,9 @@ export const authRouteMiddleware = createMiddleware().server(
     const session = await auth.api.getSession(request);
 
     if (session?.user) {
-      const url = new URL(request.url);
-      const searchParams = new URLSearchParams(url.search);
-      const addAccount = searchParams.get('addAccount') === 'true';
-
-      // Allow access to auth pages if adding a new account
-      if (!addAccount) {
-        throw redirect({
-          to: '/dashboard',
-        });
-      }
+      throw redirect({
+        to: '/dashboard',
+      });
     }
 
     return next({

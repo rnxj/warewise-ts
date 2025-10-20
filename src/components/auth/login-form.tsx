@@ -9,7 +9,6 @@ import { FormError, FormSuccess } from '@/components/ui/form-messages';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { authClient } from '@/lib/auth/client';
-import { Route } from '@/routes/auth/login';
 
 const schema = z.object({
   email: z.string().email({ message: 'Invalid email address' }),
@@ -36,7 +35,6 @@ const LoginForm = () => {
 
   const id = useId();
   const router = useRouter();
-  const { addAccount } = Route.useSearch();
 
   const toggleVisibility = () => setIsVisible((prev) => !prev);
 
@@ -47,13 +45,8 @@ const LoginForm = () => {
       password: data.password,
     });
     if (result.data) {
-      if (addAccount) {
-        setFormState({ success: 'Account added successfully' });
-        router.navigate({ to: '/profile' });
-      } else {
-        setFormState({ success: 'Login successful' });
-        router.navigate({ to: '/dashboard' });
-      }
+      setFormState({ success: 'Login successful' });
+      router.navigate({ to: '/dashboard' });
     } else if (result.error) {
       setFormState({ error: result.error.message || 'An error occurred' });
     }
@@ -62,9 +55,6 @@ const LoginForm = () => {
   const getButtonText = () => {
     if (isSubmitting) {
       return 'Logging in...';
-    }
-    if (addAccount) {
-      return 'Add Account';
     }
     return 'Login';
   };
@@ -124,16 +114,6 @@ const LoginForm = () => {
       <Button className="mt-2 w-full" disabled={isSubmitting} type="submit">
         {getButtonText()}
       </Button>
-      {addAccount && (
-        <Button
-          className="w-full"
-          onClick={() => router.navigate({ to: '/profile' })}
-          type="button"
-          variant="outline"
-        >
-          Cancel
-        </Button>
-      )}
     </form>
   );
 };
