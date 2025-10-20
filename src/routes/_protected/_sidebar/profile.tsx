@@ -7,7 +7,7 @@ import { UpdateUserInfo } from '@/components/auth/profile/update-user-info';
 import { SignOutButton } from '@/components/auth/sign-out-button';
 import { authClient } from '@/lib/auth/client';
 
-export const Route = createFileRoute('/_protected/profile')({
+export const Route = createFileRoute('/_protected/_sidebar/profile')({
   component: ProfilePage,
 });
 

@@ -1,4 +1,7 @@
+import { Loader2 } from 'lucide-react';
+import { motion } from 'motion/react';
 import type { SVGProps } from 'react';
+import { cn } from '@/lib/utils';
 
 export const React = (props: SVGProps<SVGSVGElement>) => {
   return (
@@ -77,5 +80,42 @@ export const SidebarToggle = (
         y="3"
       />
     </svg>
+  );
+};
+
+export const Loader = ({
+  className,
+  fullScreen = false,
+  sidebarLayout = false,
+}: {
+  className?: string;
+  fullScreen?: boolean;
+  sidebarLayout?: boolean;
+}) => {
+  const containerClasses = cn('flex items-center gap-3', {
+    'fixed inset-0 justify-center': fullScreen,
+    'min-h-[50vh] w-full justify-center': sidebarLayout && !fullScreen,
+  });
+
+  return (
+    <motion.div
+      animate={{ opacity: 1, scale: 1 }}
+      className={containerClasses}
+      initial={{ opacity: 0, scale: 0.98 }}
+      transition={{ duration: 0.2, ease: 'easeOut' }}
+    >
+      <motion.span
+        animate={{ rotate: 360 }}
+        aria-hidden
+        className="inline-flex"
+        transition={{
+          repeat: Number.POSITIVE_INFINITY,
+          duration: 1.2,
+          ease: 'linear',
+        }}
+      >
+        <Loader2 className={cn('h-6 w-6 text-primary', className)} />
+      </motion.span>
+    </motion.div>
   );
 };

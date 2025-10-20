@@ -54,6 +54,74 @@ export const protectedRouteMiddleware = createMiddleware().server(
         auth,
         userId: session.user.id,
         email: session.user.email,
+        activeOrganizationId: session.session.activeOrganizationId,
+      },
+    });
+  }
+);
+
+// Middleware for routes that require a workspace - redirects to workspace creation
+export const workspaceRequiredMiddleware = createMiddleware().server(
+  async ({ next, request }) => {
+    const auth = getAuth();
+    const session = await auth.api.getSession(request);
+
+    if (!session?.user) {
+      const url = new URL(request.url);
+      throw redirect({
+        to: '/auth/login',
+        search: {
+          redirect: url.pathname + url.search,
+        },
+      });
+    }
+
+    // Skip workspace check for certain routes
+    const url = new URL(request.url);
+    const skipWorkspaceRoutes = ['/workspace/create', '/accept-invitation'];
+
+    if (skipWorkspaceRoutes.some((route) => url.pathname.includes(route))) {
+      return next({
+        context: {
+          auth,
+          userId: session.user.id,
+          email: session.user.email,
+          activeOrganizationId: session.session.activeOrganizationId,
+        },
+      });
+    }
+
+    const organizations = await auth.api.listOrganizations({
+      headers: request.headers,
+    });
+
+    if (!organizations || organizations.length === 0) {
+      throw redirect({
+        to: '/workspace/create',
+      });
+    }
+
+    // Check if user has an active organization
+    if (!session.session.activeOrganizationId) {
+      // User has organizations but none is active, set the first one as active
+      const firstOrg = organizations[0];
+      await auth.api.setActiveOrganization({
+        body: { organizationId: firstOrg.id },
+        headers: request.headers,
+      });
+
+      // Redirect to same page to refresh with active organization
+      throw redirect({
+        to: url.pathname + url.search,
+      });
+    }
+
+    return next({
+      context: {
+        auth,
+        userId: session.user.id,
+        email: session.user.email,
+        activeOrganizationId: session.session.activeOrganizationId,
       },
     });
   }

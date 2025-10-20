@@ -4,6 +4,9 @@ import {
   auth_session,
   auth_user,
   auth_verification,
+  invitation,
+  member,
+  organization,
 } from '@/lib/db/auth-schema';
 import type { getDb } from '@/lib/db/setup';
 import { createBetterAuth } from './setup';
@@ -26,6 +29,9 @@ export function setAuth(
         auth_account,
         auth_session,
         auth_verification,
+        organization,
+        member,
+        invitation,
       },
     }),
     ...config,

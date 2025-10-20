@@ -14,10 +14,14 @@ import { Route as ProtectedRouteRouteImport } from './routes/_protected/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRegisterRouteImport } from './routes/auth/register'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
-import { Route as ProtectedProfileRouteImport } from './routes/_protected/profile'
-import { Route as ProtectedDashboardRouteImport } from './routes/_protected/dashboard'
+import { Route as ProtectedSidebarRouteRouteImport } from './routes/_protected/_sidebar/route'
 import { Route as ApiTrpcSplatRouteImport } from './routes/api/trpc.$'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth.$'
+import { Route as ProtectedWorkspaceCreateRouteImport } from './routes/_protected/workspace/create'
+import { Route as ProtectedAcceptInvitationInvitationIdRouteImport } from './routes/_protected/accept-invitation/$invitationId'
+import { Route as ProtectedSidebarProfileRouteImport } from './routes/_protected/_sidebar/profile'
+import { Route as ProtectedSidebarDashboardRouteImport } from './routes/_protected/_sidebar/dashboard'
+import { Route as ProtectedSidebarWorkspaceSettingsRouteImport } from './routes/_protected/_sidebar/workspace/settings'
 
 const AuthRouteRoute = AuthRouteRouteImport.update({
   id: '/auth',
@@ -43,14 +47,8 @@ const AuthLoginRoute = AuthLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => AuthRouteRoute,
 } as any)
-const ProtectedProfileRoute = ProtectedProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
-  getParentRoute: () => ProtectedRouteRoute,
-} as any)
-const ProtectedDashboardRoute = ProtectedDashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
+const ProtectedSidebarRouteRoute = ProtectedSidebarRouteRouteImport.update({
+  id: '/_sidebar',
   getParentRoute: () => ProtectedRouteRoute,
 } as any)
 const ApiTrpcSplatRoute = ApiTrpcSplatRouteImport.update({
@@ -63,71 +61,120 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProtectedWorkspaceCreateRoute =
+  ProtectedWorkspaceCreateRouteImport.update({
+    id: '/workspace/create',
+    path: '/workspace/create',
+    getParentRoute: () => ProtectedRouteRoute,
+  } as any)
+const ProtectedAcceptInvitationInvitationIdRoute =
+  ProtectedAcceptInvitationInvitationIdRouteImport.update({
+    id: '/accept-invitation/$invitationId',
+    path: '/accept-invitation/$invitationId',
+    getParentRoute: () => ProtectedRouteRoute,
+  } as any)
+const ProtectedSidebarProfileRoute = ProtectedSidebarProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => ProtectedSidebarRouteRoute,
+} as any)
+const ProtectedSidebarDashboardRoute =
+  ProtectedSidebarDashboardRouteImport.update({
+    id: '/dashboard',
+    path: '/dashboard',
+    getParentRoute: () => ProtectedSidebarRouteRoute,
+  } as any)
+const ProtectedSidebarWorkspaceSettingsRoute =
+  ProtectedSidebarWorkspaceSettingsRouteImport.update({
+    id: '/workspace/settings',
+    path: '/workspace/settings',
+    getParentRoute: () => ProtectedSidebarRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRouteWithChildren
-  '/dashboard': typeof ProtectedDashboardRoute
-  '/profile': typeof ProtectedProfileRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
+  '/dashboard': typeof ProtectedSidebarDashboardRoute
+  '/profile': typeof ProtectedSidebarProfileRoute
+  '/accept-invitation/$invitationId': typeof ProtectedAcceptInvitationInvitationIdRoute
+  '/workspace/create': typeof ProtectedWorkspaceCreateRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/trpc/$': typeof ApiTrpcSplatRoute
+  '/workspace/settings': typeof ProtectedSidebarWorkspaceSettingsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRouteWithChildren
-  '/dashboard': typeof ProtectedDashboardRoute
-  '/profile': typeof ProtectedProfileRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
+  '/dashboard': typeof ProtectedSidebarDashboardRoute
+  '/profile': typeof ProtectedSidebarProfileRoute
+  '/accept-invitation/$invitationId': typeof ProtectedAcceptInvitationInvitationIdRoute
+  '/workspace/create': typeof ProtectedWorkspaceCreateRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/trpc/$': typeof ApiTrpcSplatRoute
+  '/workspace/settings': typeof ProtectedSidebarWorkspaceSettingsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_protected': typeof ProtectedRouteRouteWithChildren
   '/auth': typeof AuthRouteRouteWithChildren
-  '/_protected/dashboard': typeof ProtectedDashboardRoute
-  '/_protected/profile': typeof ProtectedProfileRoute
+  '/_protected/_sidebar': typeof ProtectedSidebarRouteRouteWithChildren
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
+  '/_protected/_sidebar/dashboard': typeof ProtectedSidebarDashboardRoute
+  '/_protected/_sidebar/profile': typeof ProtectedSidebarProfileRoute
+  '/_protected/accept-invitation/$invitationId': typeof ProtectedAcceptInvitationInvitationIdRoute
+  '/_protected/workspace/create': typeof ProtectedWorkspaceCreateRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/trpc/$': typeof ApiTrpcSplatRoute
+  '/_protected/_sidebar/workspace/settings': typeof ProtectedSidebarWorkspaceSettingsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/auth'
-    | '/dashboard'
-    | '/profile'
     | '/auth/login'
     | '/auth/register'
+    | '/dashboard'
+    | '/profile'
+    | '/accept-invitation/$invitationId'
+    | '/workspace/create'
     | '/api/auth/$'
     | '/api/trpc/$'
+    | '/workspace/settings'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
-    | '/dashboard'
-    | '/profile'
     | '/auth/login'
     | '/auth/register'
+    | '/dashboard'
+    | '/profile'
+    | '/accept-invitation/$invitationId'
+    | '/workspace/create'
     | '/api/auth/$'
     | '/api/trpc/$'
+    | '/workspace/settings'
   id:
     | '__root__'
     | '/'
     | '/_protected'
     | '/auth'
-    | '/_protected/dashboard'
-    | '/_protected/profile'
+    | '/_protected/_sidebar'
     | '/auth/login'
     | '/auth/register'
+    | '/_protected/_sidebar/dashboard'
+    | '/_protected/_sidebar/profile'
+    | '/_protected/accept-invitation/$invitationId'
+    | '/_protected/workspace/create'
     | '/api/auth/$'
     | '/api/trpc/$'
+    | '/_protected/_sidebar/workspace/settings'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -175,18 +222,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLoginRouteImport
       parentRoute: typeof AuthRouteRoute
     }
-    '/_protected/profile': {
-      id: '/_protected/profile'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof ProtectedProfileRouteImport
-      parentRoute: typeof ProtectedRouteRoute
-    }
-    '/_protected/dashboard': {
-      id: '/_protected/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof ProtectedDashboardRouteImport
+    '/_protected/_sidebar': {
+      id: '/_protected/_sidebar'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof ProtectedSidebarRouteRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
     '/api/trpc/$': {
@@ -203,17 +243,73 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_protected/workspace/create': {
+      id: '/_protected/workspace/create'
+      path: '/workspace/create'
+      fullPath: '/workspace/create'
+      preLoaderRoute: typeof ProtectedWorkspaceCreateRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
+    '/_protected/accept-invitation/$invitationId': {
+      id: '/_protected/accept-invitation/$invitationId'
+      path: '/accept-invitation/$invitationId'
+      fullPath: '/accept-invitation/$invitationId'
+      preLoaderRoute: typeof ProtectedAcceptInvitationInvitationIdRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
+    '/_protected/_sidebar/profile': {
+      id: '/_protected/_sidebar/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProtectedSidebarProfileRouteImport
+      parentRoute: typeof ProtectedSidebarRouteRoute
+    }
+    '/_protected/_sidebar/dashboard': {
+      id: '/_protected/_sidebar/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof ProtectedSidebarDashboardRouteImport
+      parentRoute: typeof ProtectedSidebarRouteRoute
+    }
+    '/_protected/_sidebar/workspace/settings': {
+      id: '/_protected/_sidebar/workspace/settings'
+      path: '/workspace/settings'
+      fullPath: '/workspace/settings'
+      preLoaderRoute: typeof ProtectedSidebarWorkspaceSettingsRouteImport
+      parentRoute: typeof ProtectedSidebarRouteRoute
+    }
   }
 }
 
+interface ProtectedSidebarRouteRouteChildren {
+  ProtectedSidebarDashboardRoute: typeof ProtectedSidebarDashboardRoute
+  ProtectedSidebarProfileRoute: typeof ProtectedSidebarProfileRoute
+  ProtectedSidebarWorkspaceSettingsRoute: typeof ProtectedSidebarWorkspaceSettingsRoute
+}
+
+const ProtectedSidebarRouteRouteChildren: ProtectedSidebarRouteRouteChildren = {
+  ProtectedSidebarDashboardRoute: ProtectedSidebarDashboardRoute,
+  ProtectedSidebarProfileRoute: ProtectedSidebarProfileRoute,
+  ProtectedSidebarWorkspaceSettingsRoute:
+    ProtectedSidebarWorkspaceSettingsRoute,
+}
+
+const ProtectedSidebarRouteRouteWithChildren =
+  ProtectedSidebarRouteRoute._addFileChildren(
+    ProtectedSidebarRouteRouteChildren,
+  )
+
 interface ProtectedRouteRouteChildren {
-  ProtectedDashboardRoute: typeof ProtectedDashboardRoute
-  ProtectedProfileRoute: typeof ProtectedProfileRoute
+  ProtectedSidebarRouteRoute: typeof ProtectedSidebarRouteRouteWithChildren
+  ProtectedAcceptInvitationInvitationIdRoute: typeof ProtectedAcceptInvitationInvitationIdRoute
+  ProtectedWorkspaceCreateRoute: typeof ProtectedWorkspaceCreateRoute
 }
 
 const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
-  ProtectedDashboardRoute: ProtectedDashboardRoute,
-  ProtectedProfileRoute: ProtectedProfileRoute,
+  ProtectedSidebarRouteRoute: ProtectedSidebarRouteRouteWithChildren,
+  ProtectedAcceptInvitationInvitationIdRoute:
+    ProtectedAcceptInvitationInvitationIdRoute,
+  ProtectedWorkspaceCreateRoute: ProtectedWorkspaceCreateRoute,
 }
 
 const ProtectedRouteRouteWithChildren = ProtectedRouteRoute._addFileChildren(

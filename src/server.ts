@@ -13,6 +13,9 @@ export default {
       BETTER_AUTH_SECRET: string;
       GOOGLE_CLIENT_ID: string;
       GOOGLE_CLIENT_SECRET: string;
+      RESEND_API_KEY?: string;
+      RESEND_EMAIL?: string;
+      APP_URL?: string;
     }
   ) {
     const db = initDatabase(env.DB);
@@ -25,6 +28,9 @@ export default {
           clientSecret: env.GOOGLE_CLIENT_SECRET,
         },
       },
+      resendApiKey: env.RESEND_API_KEY,
+      resendEmail: env.RESEND_EMAIL,
+      appUrl: env.APP_URL,
       adapter: {
         drizzleDb: db,
         provider: 'sqlite',
