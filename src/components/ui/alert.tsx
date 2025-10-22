@@ -4,13 +4,17 @@ import type * as React from 'react';
 import { cn } from '@/lib/utils';
 
 const alertVariants = cva(
-  'relative grid w-full grid-cols-[0_1fr] items-start gap-y-0.5 rounded-lg border px-4 py-3 text-sm has-[>svg]:grid-cols-[calc(var(--spacing)*4)_1fr] has-[>svg]:gap-x-3 [&>svg]:size-4 [&>svg]:translate-y-0.5 [&>svg]:text-current',
+  'relative grid w-full items-start gap-x-2 gap-y-0.5 rounded-xl border px-3.5 py-3 text-card-foreground text-sm has-[>svg]:has-data-[slot=alert-action]:grid-cols-[calc(var(--spacing)*4)_1fr_auto] has-[>svg]:grid-cols-[calc(var(--spacing)*4)_1fr] has-data-[slot=alert-action]:grid-cols-[1fr_auto] has-[>svg]:gap-x-2 [&>svg]:h-[1lh] [&>svg]:w-4',
   {
     variants: {
       variant: {
-        default: 'bg-card text-card-foreground',
-        destructive:
-          'bg-card text-destructive *:data-[slot=alert-description]:text-destructive/90 [&>svg]:text-current',
+        default:
+          'bg-transparent dark:bg-input/32 [&>svg]:text-muted-foreground',
+        info: 'border-info/32 bg-info/4 [&>svg]:text-info',
+        success: 'border-success/32 bg-success/4 [&>svg]:text-success',
+        warning: 'border-warning/32 bg-warning/4 [&>svg]:text-warning',
+        error:
+          'border-destructive/32 bg-destructive/4 [&>svg]:text-destructive',
       },
     },
     defaultVariants: {
@@ -37,10 +41,7 @@ function Alert({
 function AlertTitle({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
-      className={cn(
-        'col-start-2 line-clamp-1 min-h-4 font-medium tracking-tight',
-        className
-      )}
+      className={cn('font-medium [svg~&]:col-start-2', className)}
       data-slot="alert-title"
       {...props}
     />
@@ -54,7 +55,7 @@ function AlertDescription({
   return (
     <div
       className={cn(
-        'col-start-2 grid justify-items-start gap-1 text-muted-foreground text-sm [&_p]:leading-relaxed',
+        'flex flex-col gap-2.5 text-muted-foreground [svg~&]:col-start-2',
         className
       )}
       data-slot="alert-description"
@@ -63,4 +64,17 @@ function AlertDescription({
   );
 }
 
-export { Alert, AlertTitle, AlertDescription };
+function AlertAction({ className, ...props }: React.ComponentProps<'div'>) {
+  return (
+    <div
+      className={cn(
+        'flex gap-1 max-sm:col-start-2 max-sm:mt-2 sm:row-start-1 sm:row-end-3 sm:self-center sm:[[data-slot=alert-description]~&]:col-start-2 sm:[[data-slot=alert-title]~&]:col-start-2 sm:[svg~&]:col-start-2 sm:[svg~[data-slot=alert-description]~&]:col-start-3 sm:[svg~[data-slot=alert-title]~&]:col-start-3',
+        className
+      )}
+      data-slot="alert-action"
+      {...props}
+    />
+  );
+}
+
+export { Alert, AlertTitle, AlertDescription, AlertAction };

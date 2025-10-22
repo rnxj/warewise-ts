@@ -1,4 +1,5 @@
-import { Slot } from '@radix-ui/react-slot';
+import { mergeProps } from '@base-ui-components/react/merge-props';
+import { useRender } from '@base-ui-components/react/use-render';
 import { ChevronRight, MoreHorizontal } from 'lucide-react';
 import type * as React from 'react';
 
@@ -32,21 +33,20 @@ function BreadcrumbItem({ className, ...props }: React.ComponentProps<'li'>) {
 }
 
 function BreadcrumbLink({
-  asChild,
   className,
+  render,
   ...props
-}: React.ComponentProps<'a'> & {
-  asChild?: boolean;
-}) {
-  const Comp = asChild ? Slot : 'a';
+}: useRender.ComponentProps<'a'>) {
+  const defaultProps = {
+    'data-slot': 'breadcrumb-link',
+    className: cn('transition-colors hover:text-foreground', className),
+  };
 
-  return (
-    <Comp
-      className={cn('transition-colors hover:text-foreground', className)}
-      data-slot="breadcrumb-link"
-      {...props}
-    />
-  );
+  return useRender({
+    defaultTagName: 'a',
+    render,
+    props: mergeProps<'a'>(defaultProps, props),
+  });
 }
 
 function BreadcrumbPage({ className, ...props }: React.ComponentProps<'span'>) {
@@ -70,7 +70,7 @@ function BreadcrumbSeparator({
   return (
     <li
       aria-hidden="true"
-      className={cn('[&>svg]:size-3.5', className)}
+      className={cn('opacity-72 [&>svg]:size-4', className)}
       data-slot="breadcrumb-separator"
       role="presentation"
       {...props}
@@ -87,7 +87,7 @@ function BreadcrumbEllipsis({
   return (
     <span
       aria-hidden="true"
-      className={cn('flex size-9 items-center justify-center', className)}
+      className={className}
       data-slot="breadcrumb-ellipsis"
       role="presentation"
       {...props}
