@@ -1,10 +1,11 @@
 import { createFileRoute, Outlet } from '@tanstack/react-router';
 import { NotFound } from '@/components/not-found';
-import { protectedRouteMiddleware } from '@/core/middleware/auth';
+import { requireAuth } from '@/lib/auth/guards';
 
 export const Route = createFileRoute('/_protected')({
-  server: {
-    middleware: [protectedRouteMiddleware],
+  beforeLoad: async () => {
+    const authData = await requireAuth();
+    return { authData };
   },
   component: ProtectedLayout,
   notFoundComponent: () => <NotFound />,

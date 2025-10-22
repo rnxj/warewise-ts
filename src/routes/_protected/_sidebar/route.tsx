@@ -15,7 +15,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from '@/components/ui/sidebar';
-import { workspaceRequiredMiddleware } from '@/core/middleware/auth';
+import { requireWorkspace } from '@/lib/auth/guards';
 
 const getSidebarState = createServerFn().handler(() => {
   const sidebarCookie = getCookie('sidebar_state');
@@ -25,8 +25,9 @@ const getSidebarState = createServerFn().handler(() => {
 });
 
 export const Route = createFileRoute('/_protected/_sidebar')({
-  server: {
-    middleware: [workspaceRequiredMiddleware],
+  beforeLoad: async () => {
+    const authData = await requireWorkspace();
+    return { authData };
   },
   loader: () => getSidebarState(),
   component: SidebarLayout,
