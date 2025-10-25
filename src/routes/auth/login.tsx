@@ -6,9 +6,9 @@ import { Google } from '@/components/icons';
 import { Button } from '@/components/ui/button';
 import {
   Card,
-  CardContent,
   CardDescription,
   CardHeader,
+  CardPanel,
   CardTitle,
 } from '@/components/ui/card';
 import { siteConfig } from '@/config/site';
@@ -41,7 +41,7 @@ function LoginPage() {
               <p>Enter your email below to login to your account</p>
             </CardDescription>
           </CardHeader>
-          <CardContent className="flex flex-col gap-4">
+          <CardPanel className="flex flex-col gap-4">
             <LoginForm />
             <div className="my-2 flex items-center">
               <div className="h-px flex-1 bg-muted-foreground/30" />
@@ -73,7 +73,7 @@ function LoginPage() {
                 Create an account
               </Link>
             </div>
-          </CardContent>
+          </CardPanel>
         </Card>
       </div>
     </div>

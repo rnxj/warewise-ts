@@ -3,12 +3,11 @@ import { useRef, useState } from 'react';
 import { toast } from 'sonner';
 import {
   AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
+  AlertDialogClose,
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
+  AlertDialogPopup,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
@@ -270,7 +269,7 @@ export function SessionManager() {
         onOpenChange={() => setSessionToRevoke(null)}
         open={!!sessionToRevoke}
       >
-        <AlertDialogContent>
+        <AlertDialogPopup>
           <AlertDialogHeader>
             <AlertDialogTitle>
               {sessionToRevoke && isCurrentSession(sessionToRevoke.id)
@@ -284,8 +283,8 @@ export function SessionManager() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
+            <AlertDialogClose>Cancel</AlertDialogClose>
+            <AlertDialogClose
               disabled={isRevoking}
               onClick={() => {
                 if (sessionToRevoke) {
@@ -309,9 +308,9 @@ export function SessionManager() {
               ) : (
                 sessionToRevoke && getSessionActionText(sessionToRevoke.id)
               )}
-            </AlertDialogAction>
+            </AlertDialogClose>
           </AlertDialogFooter>
-        </AlertDialogContent>
+        </AlertDialogPopup>
       </AlertDialog>
     </div>
   );

@@ -6,10 +6,10 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
   Dialog,
-  DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
+  DialogPopup,
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
@@ -101,7 +101,7 @@ export function ChangePassword() {
               </Button>
             )}
           />
-          <DialogContent>
+          <DialogPopup>
             <DialogHeader>
               <DialogTitle>Change Password</DialogTitle>
               <DialogDescription>
@@ -220,7 +220,7 @@ export function ChangePassword() {
                 )}
               </Button>
             </DialogFooter>
-          </DialogContent>
+          </DialogPopup>
         </Dialog>
       </div>
     </div>

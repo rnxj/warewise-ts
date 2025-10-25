@@ -7,9 +7,9 @@ import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import {
   Card,
-  CardContent,
   CardDescription,
   CardHeader,
+  CardPanel,
   CardTitle,
 } from '@/components/ui/card';
 import {
@@ -131,7 +131,7 @@ function CreateWorkspacePage() {
               <p>Set up your workspace to get started</p>
             </CardDescription>
           </CardHeader>
-          <CardContent className="flex flex-col gap-4">
+          <CardPanel className="flex flex-col gap-4">
             <Form
               className="space-y-4"
               errors={errors}
@@ -164,7 +164,7 @@ function CreateWorkspacePage() {
                 {isCreating ? 'Creating workspace...' : 'Create workspace'}
               </Button>
             </Form>
-          </CardContent>
+          </CardPanel>
         </Card>
       </div>
     </div>

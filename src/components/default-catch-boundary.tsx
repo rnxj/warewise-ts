@@ -12,10 +12,10 @@ import {
 import { useState } from 'react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardHeader, CardPanel, CardTitle } from '@/components/ui/card';
 import {
   Collapsible,
-  CollapsibleContent,
+  CollapsiblePanel,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
 
@@ -57,7 +57,7 @@ export function DefaultCatchBoundary({ error }: ErrorComponentProps) {
           </div>
         </CardHeader>
 
-        <CardContent className="space-y-6">
+        <CardPanel className="space-y-6">
           {/* Error Alert */}
           <Alert variant="error">
             <AlertTriangle className="h-4 w-4" />
@@ -116,7 +116,7 @@ export function DefaultCatchBoundary({ error }: ErrorComponentProps) {
                   </Button>
                 )}
               />
-              <CollapsibleContent className="space-y-2">
+              <CollapsiblePanel className="space-y-2">
                 <div className="rounded-lg bg-muted p-4">
                   <h4 className="mb-2 font-medium text-sm">
                     Error Stack Trace:
@@ -125,7 +125,7 @@ export function DefaultCatchBoundary({ error }: ErrorComponentProps) {
                     {errorStack}
                   </pre>
                 </div>
-              </CollapsibleContent>
+              </CollapsiblePanel>
             </Collapsible>
           )}
 
@@ -145,7 +145,7 @@ export function DefaultCatchBoundary({ error }: ErrorComponentProps) {
               </Button>
             </div>
           </div>
-        </CardContent>
+        </CardPanel>
       </Card>
     </div>
   );

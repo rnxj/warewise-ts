@@ -8,10 +8,10 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
-  DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
+  DialogPopup,
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
@@ -117,7 +117,7 @@ export function UpdateUserInfo({
               </Button>
             )}
           />
-          <DialogContent>
+          <DialogPopup>
             <DialogHeader>
               <DialogTitle>Edit Profile</DialogTitle>
               <DialogDescription>
@@ -169,7 +169,7 @@ export function UpdateUserInfo({
                 </Button>
               </DialogFooter>
             </Form>
-          </DialogContent>
+          </DialogPopup>
         </Dialog>
       </div>
 

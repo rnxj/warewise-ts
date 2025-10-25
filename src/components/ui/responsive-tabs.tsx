@@ -3,12 +3,12 @@ import { useState } from 'react';
 // ScrollArea removed to avoid hover-induced scrollbar behavior
 import {
   Select,
-  SelectContent,
   SelectItem,
+  SelectPopup,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsList, TabsTab } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
 
 interface ResponsiveTabItem {
@@ -61,7 +61,7 @@ function ResponsiveTabs({
             variant="underline"
           >
             {items.map((item) => (
-              <TabsTrigger key={item.value} value={item.value}>
+              <TabsTab key={item.value} value={item.value}>
                 {item.icon && (
                   <span
                     aria-hidden="true"
@@ -71,7 +71,7 @@ function ResponsiveTabs({
                   </span>
                 )}
                 {item.label}
-              </TabsTrigger>
+              </TabsTab>
             ))}
           </TabsList>
         </div>
@@ -102,7 +102,7 @@ function ResponsiveTabs({
               })()}
             </SelectValue>
           </SelectTrigger>
-          <SelectContent>
+          <SelectPopup>
             {items.map((item) => (
               <SelectItem key={item.value} value={item.value}>
                 <div className="flex items-center gap-2">
@@ -115,7 +115,7 @@ function ResponsiveTabs({
                 </div>
               </SelectItem>
             ))}
-          </SelectContent>
+          </SelectPopup>
         </Select>
       </div>
 
@@ -125,5 +125,5 @@ function ResponsiveTabs({
 }
 
 export { ResponsiveTabs };
-export { TabsContent } from '@/components/ui/tabs';
+export { TabsPanel } from '@/components/ui/tabs';
 export type { ResponsiveTabItem };

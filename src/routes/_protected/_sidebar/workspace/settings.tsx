@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { Mail, Settings, Users } from 'lucide-react';
 import { Loader } from '@/components/icons';
-import { ResponsiveTabs, TabsContent } from '@/components/ui/responsive-tabs';
+import { ResponsiveTabs, TabsPanel } from '@/components/ui/responsive-tabs';
 import { InvitationsManager } from '@/components/workspace/invitations-manager';
 import { MembersManager } from '@/components/workspace/members-manager';
 import { UpdateWorkspaceInfo } from '@/components/workspace/update-workspace-info';
@@ -60,21 +60,21 @@ function WorkspaceSettingsPage() {
           },
         ]}
       >
-        <TabsContent className="space-y-6" value="general">
+        <TabsPanel className="space-y-6" value="general">
           <UpdateWorkspaceInfo
             initialLogo={activeOrg.logo || ''}
             initialName={activeOrg.name}
             initialSlug={activeOrg.slug}
           />
-        </TabsContent>
+        </TabsPanel>
 
-        <TabsContent value="members">
+        <TabsPanel value="members">
           <MembersManager />
-        </TabsContent>
+        </TabsPanel>
 
-        <TabsContent value="invitations">
+        <TabsPanel value="invitations">
           <InvitationsManager />
-        </TabsContent>
+        </TabsPanel>
       </ResponsiveTabs>
     </div>
   );

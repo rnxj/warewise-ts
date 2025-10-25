@@ -1,13 +1,13 @@
 import { Link } from '@tanstack/react-router';
 import { ArrowLeft, FileQuestion, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardPanel } from '@/components/ui/card';
 
 export function NotFound({ children }: { children?: React.ReactNode }) {
   return (
     <div className="flex min-h-[60vh] items-center justify-center p-4">
       <Card className="w-full max-w-md">
-        <CardContent className="pt-6">
+        <CardPanel className="pt-6">
           <div className="flex flex-col items-center space-y-6 text-center">
             {/* Icon */}
             <div className="flex h-20 w-20 items-center justify-center rounded-full bg-muted">
@@ -54,7 +54,7 @@ export function NotFound({ children }: { children?: React.ReactNode }) {
               Try checking the URL
             </div>
           </div>
-        </CardContent>
+        </CardPanel>
       </Card>
     </div>
   );

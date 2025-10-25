@@ -168,7 +168,6 @@ export {
   SelectTrigger,
   SelectValue,
   SelectPopup,
-  SelectPopup as SelectContent,
   SelectItem,
   SelectSeparator,
   SelectGroup,

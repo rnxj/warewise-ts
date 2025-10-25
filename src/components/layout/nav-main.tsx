@@ -4,7 +4,7 @@ import type * as React from 'react';
 
 import {
   Collapsible,
-  CollapsibleContent,
+  CollapsiblePanel,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
 import {
@@ -146,7 +146,7 @@ export function NavMain({
                     </SidebarMenuButton>
                   )}
                 />
-                <CollapsibleContent>
+                <CollapsiblePanel>
                   <SidebarMenuSub>
                     {item.items?.map((subItem) => {
                       const isSubItemActive =
@@ -166,7 +166,7 @@ export function NavMain({
                       );
                     })}
                   </SidebarMenuSub>
-                </CollapsibleContent>
+                </CollapsiblePanel>
               </Collapsible>
             </SidebarMenuItem>
           ) : (

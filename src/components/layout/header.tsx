@@ -3,11 +3,7 @@ import { Github, Menu } from 'lucide-react';
 import React from 'react';
 import { ModeToggle } from '@/components/theme/mode-toggle';
 import { Button } from '@/components/ui/button';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
+import { Popover, PopoverPopup, PopoverTrigger } from '@/components/ui/popover';
 import { siteConfig } from '@/config/site';
 import { cn } from '@/lib/utils';
 
@@ -94,7 +90,7 @@ export const HeroHeader = () => {
                     </Button>
                   )}
                 />
-                <PopoverContent align="end" className="w-64 p-4" sideOffset={8}>
+                <PopoverPopup align="end" className="w-64 p-4" sideOffset={8}>
                   <div className="flex flex-col space-y-3">
                     <div className="flex items-center justify-between">
                       <span className="font-medium text-sm">Theme</span>
@@ -134,7 +130,7 @@ export const HeroHeader = () => {
                       variant="outline"
                     />
                   </div>
-                </PopoverContent>
+                </PopoverPopup>
               </Popover>
             </div>
           </div>

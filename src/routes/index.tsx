@@ -15,7 +15,7 @@ import { HeroHeader } from '@/components/layout/header';
 import { NotFound } from '@/components/not-found';
 import { AnimatedGroup } from '@/components/ui/animated-group';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Card, CardHeader, CardPanel } from '@/components/ui/card';
 import { TextEffect } from '@/components/ui/text-effect';
 import { siteConfig } from '@/config/site';
 
@@ -191,13 +191,13 @@ function HomeComponent() {
                       </CardDecorator>
                       <h3 className="mt-6 font-medium">Inventory Management</h3>
                     </CardHeader>
-                    <CardContent>
+                    <CardPanel>
                       <p className="text-sm">
                         Track stock levels, manage products, set reorder points,
                         and get real-time inventory insights across all
                         locations.
                       </p>
-                    </CardContent>
+                    </CardPanel>
                   </Card>
 
                   <Card className="group shadow-zinc-950/5">
@@ -207,13 +207,13 @@ function HomeComponent() {
                       </CardDecorator>
                       <h3 className="mt-6 font-medium">Vendor Management</h3>
                     </CardHeader>
-                    <CardContent>
+                    <CardPanel>
                       <p className="text-sm">
                         Manage supplier relationships, track purchase orders,
                         and maintain comprehensive vendor records with payment
                         history.
                       </p>
-                    </CardContent>
+                    </CardPanel>
                   </Card>
 
                   <Card className="group shadow-zinc-950/5">
@@ -223,13 +223,13 @@ function HomeComponent() {
                       </CardDecorator>
                       <h3 className="mt-6 font-medium">GST Billing</h3>
                     </CardHeader>
-                    <CardContent>
+                    <CardPanel>
                       <p className="text-sm">
                         Generate GST-compliant invoices, manage tax
                         calculations, and ensure seamless compliance with Indian
                         tax regulations.
                       </p>
-                    </CardContent>
+                    </CardPanel>
                   </Card>
 
                   <Card className="group shadow-zinc-950/5">
@@ -239,13 +239,13 @@ function HomeComponent() {
                       </CardDecorator>
                       <h3 className="mt-6 font-medium">Point of Sale</h3>
                     </CardHeader>
-                    <CardContent>
+                    <CardPanel>
                       <p className="text-sm">
                         Modern POS system for quick sales processing, barcode
                         scanning, and seamless integration with inventory
                         management.
                       </p>
-                    </CardContent>
+                    </CardPanel>
                   </Card>
 
                   <Card className="group shadow-zinc-950/5">
@@ -255,13 +255,13 @@ function HomeComponent() {
                       </CardDecorator>
                       <h3 className="mt-6 font-medium">Customer Management</h3>
                     </CardHeader>
-                    <CardContent>
+                    <CardPanel>
                       <p className="text-sm">
                         Build lasting customer relationships with detailed
                         profiles, purchase history, and personalized
                         communication tools.
                       </p>
-                    </CardContent>
+                    </CardPanel>
                   </Card>
 
                   <Card className="group shadow-zinc-950/5">
@@ -271,13 +271,13 @@ function HomeComponent() {
                       </CardDecorator>
                       <h3 className="mt-6 font-medium">Accounting</h3>
                     </CardHeader>
-                    <CardContent>
+                    <CardPanel>
                       <p className="text-sm">
                         Complete financial management with automated
                         bookkeeping, expense tracking, and comprehensive
                         financial reporting.
                       </p>
-                    </CardContent>
+                    </CardPanel>
                   </Card>
 
                   <Card className="group shadow-zinc-950/5">
@@ -287,12 +287,12 @@ function HomeComponent() {
                       </CardDecorator>
                       <h3 className="mt-6 font-medium">Business Analytics</h3>
                     </CardHeader>
-                    <CardContent>
+                    <CardPanel>
                       <p className="text-sm">
                         Gain insights with detailed reports, sales analytics,
                         and performance metrics to make data-driven decisions.
                       </p>
-                    </CardContent>
+                    </CardPanel>
                   </Card>
 
                   <Card className="group shadow-zinc-950/5">
@@ -302,13 +302,13 @@ function HomeComponent() {
                       </CardDecorator>
                       <h3 className="mt-6 font-medium">Mobile Ready</h3>
                     </CardHeader>
-                    <CardContent>
+                    <CardPanel>
                       <p className="text-sm">
                         Access your business data anywhere with our
                         mobile-responsive design and progressive web app
                         capabilities.
                       </p>
-                    </CardContent>
+                    </CardPanel>
                   </Card>
                 </div>
               </div>

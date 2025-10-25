@@ -6,9 +6,9 @@ import { Loader } from '@/components/icons';
 import { Button } from '@/components/ui/button';
 import {
   Card,
-  CardContent,
   CardDescription,
   CardHeader,
+  CardPanel,
   CardTitle,
 } from '@/components/ui/card';
 import { siteConfig } from '@/config/site';
@@ -215,7 +215,7 @@ function AcceptInvitationPage() {
                 Invalid Invitation
               </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardPanel>
               <p className="text-center text-muted-foreground">
                 {error || 'This invitation is not valid or has been removed.'}
               </p>
@@ -225,7 +225,7 @@ function AcceptInvitationPage() {
               >
                 Go Home
               </Button>
-            </CardContent>
+            </CardPanel>
           </Card>
         </div>
       </div>
@@ -252,7 +252,7 @@ function AcceptInvitationPage() {
                 Invitation Expired
               </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardPanel>
               <p className="text-center text-muted-foreground">
                 This invitation has expired. Please contact the workspace owner
                 for a new invitation.
@@ -263,7 +263,7 @@ function AcceptInvitationPage() {
               >
                 Go Home
               </Button>
-            </CardContent>
+            </CardPanel>
           </Card>
         </div>
       </div>
@@ -289,7 +289,7 @@ function AcceptInvitationPage() {
               <strong>{getRoleLabel(invitation.role)}</strong>
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardPanel className="space-y-4">
             <div className="rounded-lg border bg-muted/30 p-6">
               <div className="space-y-3 text-center">
                 <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 font-medium text-primary text-sm">
@@ -321,7 +321,7 @@ function AcceptInvitationPage() {
                 {isAccepting ? 'Accepting...' : 'Accept Invitation'}
               </Button>
             </div>
-          </CardContent>
+          </CardPanel>
         </Card>
       </div>
     </div>

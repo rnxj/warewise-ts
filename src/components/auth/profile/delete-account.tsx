@@ -3,11 +3,11 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 import {
   AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
+  AlertDialogClose,
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
+  AlertDialogPopup,
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
@@ -100,7 +100,7 @@ export function DeleteAccount() {
               </Button>
             )}
           />
-          <AlertDialogContent>
+          <AlertDialogPopup>
             <AlertDialogHeader>
               <AlertDialogTitle className="flex items-center gap-2">
                 <AlertTriangle className="h-5 w-5 text-destructive" />
@@ -138,7 +138,7 @@ export function DeleteAccount() {
               </div>
             </div>
             <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogClose>Cancel</AlertDialogClose>
               <Button
                 disabled={isDeleting || confirmText !== 'DELETE' || !password}
                 onClick={handleDeleteAccount}
@@ -154,7 +154,7 @@ export function DeleteAccount() {
                 )}
               </Button>
             </AlertDialogFooter>
-          </AlertDialogContent>
+          </AlertDialogPopup>
         </AlertDialog>
       </div>
     </div>

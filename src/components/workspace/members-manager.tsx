@@ -17,12 +17,11 @@ import { z } from 'zod';
 import { Loader } from '@/components/icons';
 import {
   AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
+  AlertDialogClose,
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
+  AlertDialogPopup,
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
@@ -31,10 +30,10 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
-  DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
+  DialogPopup,
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
@@ -131,7 +130,7 @@ export function MembersManager() {
 
       toast.success('Invitation sent successfully!');
       setIsInviteDialogOpen(false);
-      reset(); // Reset form after successful submission
+      reset();
     } catch (_error) {
       toast.error('Failed to send invitation');
     }
@@ -234,7 +233,7 @@ export function MembersManager() {
                 </Button>
               )}
             />
-            <DialogContent>
+            <DialogPopup>
               <DialogHeader>
                 <DialogTitle className="flex items-center gap-2">
                   <UserPlus className="h-5 w-5" />
@@ -294,7 +293,7 @@ export function MembersManager() {
                   </Button>
                 </DialogFooter>
               </Form>
-            </DialogContent>
+            </DialogPopup>
           </Dialog>
         </div>
       </div>
@@ -361,7 +360,7 @@ export function MembersManager() {
                           </Button>
                         )}
                       />
-                      <AlertDialogContent>
+                      <AlertDialogPopup>
                         <AlertDialogHeader>
                           <AlertDialogTitle>Remove member</AlertDialogTitle>
                           <AlertDialogDescription>
@@ -370,17 +369,17 @@ export function MembersManager() {
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
-                          <AlertDialogCancel>Cancel</AlertDialogCancel>
-                          <AlertDialogAction
+                          <AlertDialogClose>Cancel</AlertDialogClose>
+                          <AlertDialogClose
                             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                             onClick={() =>
                               handleRemoveMember(member.user.email)
                             }
                           >
                             Remove
-                          </AlertDialogAction>
+                          </AlertDialogClose>
                         </AlertDialogFooter>
-                      </AlertDialogContent>
+                      </AlertDialogPopup>
                     </AlertDialog>
                   )}
                 </TableCell>
