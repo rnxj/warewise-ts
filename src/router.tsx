@@ -9,7 +9,6 @@ import { createTRPCClient, httpBatchLink } from '@trpc/client';
 import { createTRPCOptionsProxy } from '@trpc/tanstack-react-query';
 import { toast } from 'sonner';
 import type { AppRouter } from '@/api/routers/index';
-import SplashScreen from '@/components/layout/splash-screen';
 import { NotFound } from '@/components/not-found';
 import { authClient } from '@/lib/auth/client';
 import { TRPCProvider } from '@/lib/trpc';
@@ -56,7 +55,6 @@ export const getRouter = () => {
     scrollRestoration: true,
     defaultPreloadStaleTime: 0,
     context: { trpc, queryClient, authClient },
-    defaultPendingComponent: () => <SplashScreen />,
     defaultNotFoundComponent: () => <NotFound />,
     Wrap: ({ children }) => (
       <QueryClientProvider client={queryClient}>
