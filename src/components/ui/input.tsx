@@ -1,16 +1,16 @@
 'use client';
 
 import { Input as InputPrimitive } from '@base-ui-components/react/input';
+import { forwardRef } from 'react';
 
 import { cn } from '@/lib/utils';
 
-function Input({
-  className,
-  size = 'default',
-  ...props
-}: Omit<InputPrimitive.Props, 'size'> & {
-  size?: 'sm' | 'default' | 'lg' | number;
-}) {
+const Input = forwardRef<
+  HTMLInputElement,
+  Omit<InputPrimitive.Props, 'size'> & {
+    size?: 'sm' | 'default' | 'lg' | number;
+  }
+>(function Input({ className, size = 'default', ...props }, ref) {
   return (
     <span
       className={cn(
@@ -31,11 +31,12 @@ function Input({
             'text-muted-foreground file:me-3 file:bg-transparent file:font-medium file:text-foreground file:text-sm'
         )}
         data-slot="input"
+        ref={ref}
         size={typeof size === 'number' ? size : undefined}
         {...props}
       />
     </span>
   );
-}
+});
 
 export { Input };

@@ -89,12 +89,18 @@ export function ChangePassword() {
           }}
           open={dialogOpen}
         >
-          <DialogTrigger asChild>
-            <Button className="w-full justify-start" variant="outline">
-              <Key className="mr-2 h-4 w-4" />
-              Change Password
-            </Button>
-          </DialogTrigger>
+          <DialogTrigger
+            render={(props) => (
+              <Button
+                className="w-full justify-start"
+                variant="outline"
+                {...props}
+              >
+                <Key className="mr-2 h-4 w-4" />
+                Change Password
+              </Button>
+            )}
+          />
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Change Password</DialogTitle>

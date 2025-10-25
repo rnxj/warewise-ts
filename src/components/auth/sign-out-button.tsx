@@ -3,8 +3,7 @@ import { Loader2, LogOut } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
-import { CommandItem } from '@/components/ui/command';
-import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
+import { MenuItem } from '@/components/ui/menu';
 import { authClient } from '@/lib/auth/client';
 import { cn } from '@/lib/utils';
 
@@ -23,7 +22,7 @@ interface SignOutButtonProps {
   redirectTo?: string;
   onSignOut?: () => void;
   children?: React.ReactNode;
-  asChild?: 'dropdown' | 'command';
+  asChild?: 'dropdown';
 }
 
 export function SignOutButton({
@@ -81,7 +80,7 @@ export function SignOutButton({
   // Render as dropdown item
   if (asChild === 'dropdown') {
     return (
-      <DropdownMenuItem
+      <MenuItem
         className={cn(
           'cursor-pointer',
           variant === 'destructive' &&
@@ -89,26 +88,10 @@ export function SignOutButton({
           className
         )}
         disabled={isSigningOut}
-        onSelect={handleSignOut}
+        onSelect={(event) => handleSignOut(event.nativeEvent as Event)}
       >
         {content}
-      </DropdownMenuItem>
-    );
-  }
-
-  // Render as command item
-  if (asChild === 'command') {
-    return (
-      <CommandItem
-        className={cn(
-          variant === 'destructive' && 'text-destructive',
-          className
-        )}
-        disabled={isSigningOut}
-        onSelect={() => handleSignOut()}
-      >
-        {content}
-      </CommandItem>
+      </MenuItem>
     );
   }
 

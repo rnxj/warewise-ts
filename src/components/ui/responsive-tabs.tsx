@@ -1,6 +1,6 @@
 import type * as React from 'react';
 import { useState } from 'react';
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+// ScrollArea removed to avoid hover-induced scrollbar behavior
 import {
   Select,
   SelectContent,
@@ -55,14 +55,13 @@ function ResponsiveTabs({
     >
       {/* Desktop Browser Tabs */}
       <div className="hidden md:block">
-        <ScrollArea>
-          <TabsList className="relative mb-3 h-auto w-full gap-0.5 bg-transparent p-0 before:absolute before:inset-x-0 before:bottom-0 before:h-px before:bg-border">
+        <div className="overflow-x-auto overflow-y-hidden">
+          <TabsList
+            className="data-[orientation=horizontal]:pb-0.5 data-[orientation=horizontal]:[&_[data-slot=tab-indicator]]:translate-y-0"
+            variant="underline"
+          >
             {items.map((item) => (
-              <TabsTrigger
-                className="overflow-hidden rounded-b-none border-x border-t bg-muted py-2 data-[state=active]:z-1 data-[state=active]:bg-background data-[state=active]:shadow-none"
-                key={item.value}
-                value={item.value}
-              >
+              <TabsTrigger key={item.value} value={item.value}>
                 {item.icon && (
                   <span
                     aria-hidden="true"
@@ -75,15 +74,14 @@ function ResponsiveTabs({
               </TabsTrigger>
             ))}
           </TabsList>
-          <ScrollBar orientation="horizontal" />
-        </ScrollArea>
+        </div>
       </div>
 
       {/* Mobile Select */}
       <div className="md:hidden">
         <Select onValueChange={handleValueChange} value={currentValue}>
           <SelectTrigger className="w-full">
-            <SelectValue placeholder="Select a tab">
+            <SelectValue>
               {(() => {
                 const currentItem = items.find(
                   (item) => item.value === currentValue

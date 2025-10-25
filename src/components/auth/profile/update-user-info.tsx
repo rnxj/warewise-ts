@@ -100,12 +100,14 @@ export function UpdateUserInfo({
       <div className="flex items-center justify-between">
         <h3 className="font-medium text-muted-foreground text-sm">Profile</h3>
         <Dialog onOpenChange={setDialogOpen} open={dialogOpen}>
-          <DialogTrigger asChild>
-            <Button size="sm" variant="ghost">
-              <Pencil className="mr-2 h-4 w-4" />
-              Edit user
-            </Button>
-          </DialogTrigger>
+          <DialogTrigger
+            render={(props) => (
+              <Button size="sm" variant="ghost" {...props}>
+                <Pencil className="mr-2 h-4 w-4" />
+                Edit user
+              </Button>
+            )}
+          />
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Edit Profile</DialogTitle>

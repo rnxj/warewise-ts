@@ -51,38 +51,57 @@ export const HeroHeader = () => {
 
             {/* Desktop Navigation */}
             <div className="hidden items-center gap-3 lg:flex">
-              <Button asChild size="sm" variant="ghost">
-                <a
-                  href={`https://github.com/${siteConfig.social.github}`}
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  <Github className="mr-2 h-4 w-4" />
-                  <span>GitHub</span>
-                </a>
-              </Button>
+              <Button
+                render={(props) => (
+                  <a
+                    href={`https://github.com/${siteConfig.social.github}`}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    {...props}
+                  >
+                    <Github className="mr-2 h-4 w-4" />
+                    <span>GitHub</span>
+                  </a>
+                )}
+                size="sm"
+                variant="ghost"
+              />
               <ModeToggle />
               <div className="h-4 w-px bg-border" />
-              <Button asChild size="sm" variant="outline">
-                <Link to="/auth/login">
-                  <span>Login</span>
-                </Link>
-              </Button>
-              <Button asChild size="sm">
-                <Link to="/auth/register">
-                  <span>Get Started</span>
-                </Link>
-              </Button>
+              <Button
+                render={(props) => (
+                  <Link to="/auth/login" {...props}>
+                    <span>Login</span>
+                  </Link>
+                )}
+                size="sm"
+                variant="outline"
+              />
+              <Button
+                render={(props) => (
+                  <Link to="/auth/register" {...props}>
+                    <span>Get Started</span>
+                  </Link>
+                )}
+                size="sm"
+              />
             </div>
 
             {/* Mobile Navigation - Using Popover */}
             <div className="lg:hidden">
               <Popover>
-                <PopoverTrigger asChild>
-                  <Button aria-label="Open Menu" size="sm" variant="ghost">
-                    <Menu className="h-5 w-5" />
-                  </Button>
-                </PopoverTrigger>
+                <PopoverTrigger
+                  render={(props) => (
+                    <Button
+                      aria-label="Open Menu"
+                      size="sm"
+                      variant="ghost"
+                      {...props}
+                    >
+                      <Menu className="h-5 w-5" />
+                    </Button>
+                  )}
+                />
                 <PopoverContent align="end" className="w-64 p-4" sideOffset={8}>
                   <div className="flex flex-col space-y-3">
                     <div className="flex items-center justify-between">
@@ -91,35 +110,40 @@ export const HeroHeader = () => {
                     </div>
                     <div className="h-px bg-border" />
                     <Button
-                      asChild
                       className="w-full"
+                      render={(props) => (
+                        <Link to="/auth/login" {...props}>
+                          <span>Login</span>
+                        </Link>
+                      )}
                       size="sm"
                       variant="outline"
-                    >
-                      <Link to="/auth/login">
-                        <span>Login</span>
-                      </Link>
-                    </Button>
-                    <Button asChild className="w-full" size="sm">
-                      <Link to="/auth/register">
-                        <span>Get Started</span>
-                      </Link>
-                    </Button>
+                    />
                     <Button
-                      asChild
                       className="w-full"
+                      render={(props) => (
+                        <Link to="/auth/register" {...props}>
+                          <span>Get Started</span>
+                        </Link>
+                      )}
+                      size="sm"
+                    />
+                    <Button
+                      className="w-full"
+                      render={(props) => (
+                        <a
+                          href={`https://github.com/${siteConfig.social.github}`}
+                          rel="noopener noreferrer"
+                          target="_blank"
+                          {...props}
+                        >
+                          <Github className="mr-2 h-4 w-4" />
+                          <span>GitHub</span>
+                        </a>
+                      )}
                       size="sm"
                       variant="outline"
-                    >
-                      <a
-                        href={`https://github.com/${siteConfig.social.github}`}
-                        rel="noopener noreferrer"
-                        target="_blank"
-                      >
-                        <Github className="mr-2 h-4 w-4" />
-                        <span>GitHub</span>
-                      </a>
-                    </Button>
+                    />
                   </div>
                 </PopoverContent>
               </Popover>

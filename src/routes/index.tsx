@@ -132,14 +132,17 @@ function HomeComponent() {
                     key={1}
                   >
                     <Button
-                      asChild
                       className="rounded-xl px-5 text-base"
+                      render={(props) => (
+                        <a
+                          href="mailto:reuelnixon@gmail.com?subject=Free Demo Request - Warewise&body=Hi, I'm interested in a free demo of Warewise for my business."
+                          {...props}
+                        >
+                          <span className="text-nowrap">Book Free Demo</span>
+                        </a>
+                      )}
                       size="lg"
-                    >
-                      <a href="mailto:reuelnixon@gmail.com?subject=Free Demo Request - Warewise&body=Hi, I'm interested in a free demo of Warewise for my business.">
-                        <span className="text-nowrap">Book Free Demo</span>
-                      </a>
-                    </Button>
+                    />
                   </div>
                 </AnimatedGroup>
               </div>
@@ -347,12 +350,19 @@ function HomeComponent() {
                   item: transitionVariants.item,
                 }}
               >
-                <Button asChild className="rounded-xl px-8" size="lg">
-                  <a href="mailto:reuelnixon@gmail.com?subject=Free Demo Request - Warewise&body=Hi, I'm interested in a free demo of Warewise for my business.">
-                    Book Free Demo
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </a>
-                </Button>
+                <Button
+                  className="rounded-xl px-8"
+                  render={(props) => (
+                    <a
+                      href="mailto:reuelnixon@gmail.com?subject=Free Demo Request - Warewise&body=Hi, I'm interested in a free demo of Warewise for my business."
+                      {...props}
+                    >
+                      Book Free Demo
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </a>
+                  )}
+                  size="lg"
+                />
               </AnimatedGroup>
             </div>
           </div>

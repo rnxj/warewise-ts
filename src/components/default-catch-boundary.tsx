@@ -59,7 +59,7 @@ export function DefaultCatchBoundary({ error }: ErrorComponentProps) {
 
         <CardContent className="space-y-6">
           {/* Error Alert */}
-          <Alert variant="destructive">
+          <Alert variant="error">
             <AlertTriangle className="h-4 w-4" />
             <AlertDescription className="font-medium">
               {errorMessage}
@@ -77,12 +77,15 @@ export function DefaultCatchBoundary({ error }: ErrorComponentProps) {
             </Button>
 
             {isRoot ? (
-              <Button asChild variant="outline">
-                <Link className="flex items-center gap-2" to="/">
-                  <Home className="h-4 w-4" />
-                  Go to Home
-                </Link>
-              </Button>
+              <Button
+                render={(props) => (
+                  <Link className="flex items-center gap-2" to="/" {...props}>
+                    <Home className="h-4 w-4" />
+                    Go to Home
+                  </Link>
+                )}
+                variant="outline"
+              />
             ) : (
               <Button
                 className="flex items-center gap-2"
@@ -98,19 +101,22 @@ export function DefaultCatchBoundary({ error }: ErrorComponentProps) {
           {/* Error Details (Collapsible) */}
           {hasStack && (
             <Collapsible onOpenChange={setShowDetails} open={showDetails}>
-              <CollapsibleTrigger asChild>
-                <Button
-                  className="flex items-center gap-2 text-muted-foreground hover:text-foreground"
-                  size="sm"
-                  variant="ghost"
-                >
-                  <Bug className="h-4 w-4" />
-                  Technical Details
-                  <ChevronDown
-                    className={`h-4 w-4 transition-transform duration-200 ${showDetails ? 'rotate-180' : ''}`}
-                  />
-                </Button>
-              </CollapsibleTrigger>
+              <CollapsibleTrigger
+                render={(props) => (
+                  <Button
+                    className="flex items-center gap-2 text-muted-foreground hover:text-foreground"
+                    size="sm"
+                    variant="ghost"
+                    {...props}
+                  >
+                    <Bug className="h-4 w-4" />
+                    Technical Details
+                    <ChevronDown
+                      className={`h-4 w-4 transition-transform duration-200 ${showDetails ? 'rotate-180' : ''}`}
+                    />
+                  </Button>
+                )}
+              />
               <CollapsibleContent className="space-y-2">
                 <div className="rounded-lg bg-muted p-4">
                   <h4 className="mb-2 font-medium text-sm">

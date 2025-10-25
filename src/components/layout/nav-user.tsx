@@ -3,13 +3,14 @@ import { ChevronsUpDown, User } from 'lucide-react';
 import { SignOutButton } from '@/components/auth/sign-out-button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+  Menu,
+  MenuGroup,
+  MenuGroupLabel,
+  MenuItem,
+  MenuPopup,
+  MenuSeparator,
+  MenuTrigger,
+} from '@/components/ui/menu';
 import {
   SidebarMenu,
   SidebarMenuButton,
@@ -54,38 +55,14 @@ export function NavUser() {
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <SidebarMenuButton
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-              size="lg"
-            >
-              <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage
-                  alt={session.user.name || ''}
-                  src={session.user.image || ''}
-                />
-                <AvatarFallback className="rounded-lg">
-                  {initials}
-                </AvatarFallback>
-              </Avatar>
-              <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">
-                  {session.user.name}
-                </span>
-                <span className="truncate text-xs">{session.user.email}</span>
-              </div>
-              <ChevronsUpDown className="ml-auto size-4" />
-            </SidebarMenuButton>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            align="end"
-            className="w-56 min-w-56 rounded-lg"
-            side={isMobile ? 'bottom' : 'right'}
-            sideOffset={4}
-          >
-            <DropdownMenuLabel className="p-0 font-normal">
-              <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+        <Menu>
+          <MenuTrigger
+            render={(props) => (
+              <SidebarMenuButton
+                className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+                size="lg"
+                {...props}
+              >
                 <Avatar className="h-8 w-8 rounded-lg">
                   <AvatarImage
                     alt={session.user.name || ''}
@@ -101,19 +78,51 @@ export function NavUser() {
                   </span>
                   <span className="truncate text-xs">{session.user.email}</span>
                 </div>
-              </div>
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link className="cursor-pointer" to="/profile">
-                <User />
-                Profile
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
+                <ChevronsUpDown className="ml-auto size-4" />
+              </SidebarMenuButton>
+            )}
+          />
+          <MenuPopup
+            align="end"
+            className="w-56 min-w-56 rounded-lg"
+            sideOffset={isMobile ? 4 : 8}
+          >
+            <MenuGroup>
+              <MenuGroupLabel className="p-0 font-normal">
+                <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+                  <Avatar className="h-8 w-8 rounded-lg">
+                    <AvatarImage
+                      alt={session.user.name || ''}
+                      src={session.user.image || ''}
+                    />
+                    <AvatarFallback className="rounded-lg">
+                      {initials}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="grid flex-1 text-left text-sm leading-tight">
+                    <span className="truncate font-medium">
+                      {session.user.name}
+                    </span>
+                    <span className="truncate text-xs">
+                      {session.user.email}
+                    </span>
+                  </div>
+                </div>
+              </MenuGroupLabel>
+            </MenuGroup>
+            <MenuSeparator />
+            <MenuItem
+              render={(props) => (
+                <Link className="cursor-pointer" to="/profile" {...props}>
+                  <User />
+                  Profile
+                </Link>
+              )}
+            />
+            <MenuSeparator />
             <SignOutButton asChild="dropdown" variant="destructive" />
-          </DropdownMenuContent>
-        </DropdownMenu>
+          </MenuPopup>
+        </Menu>
       </SidebarMenuItem>
     </SidebarMenu>
   );

@@ -220,12 +220,14 @@ export function MembersManager() {
             onOpenChange={setIsInviteDialogOpen}
             open={isInviteDialogOpen}
           >
-            <DialogTrigger asChild>
-              <Button className="flex items-center gap-2">
-                <Plus className="h-4 w-4" />
-                Invite Member
-              </Button>
-            </DialogTrigger>
+            <DialogTrigger
+              render={(props) => (
+                <Button className="flex items-center gap-2" {...props}>
+                  <Plus className="h-4 w-4" />
+                  Invite Member
+                </Button>
+              )}
+            />
             <DialogContent>
               <DialogHeader>
                 <DialogTitle className="flex items-center gap-2">
@@ -272,7 +274,11 @@ export function MembersManager() {
                             onValueChange={field.onChange}
                           >
                             <SelectTrigger>
-                              <SelectValue placeholder="Select role" />
+                              <SelectValue>
+                                {field.value
+                                  ? getRoleLabel(field.value)
+                                  : 'Select role'}
+                              </SelectValue>
                             </SelectTrigger>
                             <SelectContent>
                               <SelectItem value="inventoryManager">
@@ -362,11 +368,13 @@ export function MembersManager() {
                 <TableCell className="whitespace-nowrap">
                   {member.role !== 'owner' && (
                     <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <Button size="sm" variant="ghost">
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </AlertDialogTrigger>
+                      <AlertDialogTrigger
+                        render={(props) => (
+                          <Button size="sm" variant="ghost" {...props}>
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        )}
+                      />
                       <AlertDialogContent>
                         <AlertDialogHeader>
                           <AlertDialogTitle>Remove member</AlertDialogTitle>

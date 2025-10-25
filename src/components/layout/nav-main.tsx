@@ -8,14 +8,14 @@ import {
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+  Menu,
+  MenuItem,
+  MenuPopup,
+  MenuSub,
+  MenuSubPopup,
+  MenuSubTrigger,
+  MenuTrigger,
+} from '@/components/ui/menu';
 import {
   SidebarGroup,
   SidebarMenu,
@@ -55,29 +55,31 @@ export function NavMain({
       // If this item has nested items, render as a submenu
       if (item.items && item.items.length > 0) {
         return (
-          <DropdownMenuSub key={item.title}>
-            <DropdownMenuSubTrigger className={cn(isItemActive && 'bg-accent')}>
+          <MenuSub key={item.title}>
+            <MenuSubTrigger className={cn(isItemActive && 'bg-accent')}>
               {item.icon && <item.icon className="mr-2 h-4 w-4" />}
               <span>{item.title}</span>
-            </DropdownMenuSubTrigger>
-            <DropdownMenuSubContent>
-              {renderDropdownItems(item.items)}
-            </DropdownMenuSubContent>
-          </DropdownMenuSub>
+            </MenuSubTrigger>
+            <MenuSubPopup>{renderDropdownItems(item.items)}</MenuSubPopup>
+          </MenuSub>
         );
       }
 
       // Otherwise render as a regular menu item
       return (
-        <DropdownMenuItem asChild key={item.title}>
-          <Link
-            className={cn('cursor-pointer', isItemActive && 'bg-accent')}
-            to={item.url}
-          >
-            {item.icon && <item.icon className="mr-2 h-4 w-4" />}
-            <span>{item.title}</span>
-          </Link>
-        </DropdownMenuItem>
+        <MenuItem
+          key={item.title}
+          render={(props) => (
+            <Link
+              className={cn('cursor-pointer', isItemActive && 'bg-accent')}
+              to={item.url}
+              {...props}
+            >
+              {item.icon && <item.icon className="mr-2 h-4 w-4" />}
+              <span>{item.title}</span>
+            </Link>
+          )}
+        />
       );
     });
   };
@@ -103,37 +105,47 @@ export function NavMain({
           if (item.items && item.items.length > 0 && isCollapsed) {
             return (
               <SidebarMenuItem key={item.title}>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <SidebarMenuButton isActive={isActive} tooltip={item.title}>
-                      {item.icon && <item.icon />}
-                      <span>{item.title}</span>
-                    </SidebarMenuButton>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="start" side="right">
+                <Menu>
+                  <MenuTrigger
+                    render={(props) => (
+                      <SidebarMenuButton
+                        isActive={isActive}
+                        tooltip={item.title}
+                        {...props}
+                      >
+                        {item.icon && <item.icon />}
+                        <span>{item.title}</span>
+                      </SidebarMenuButton>
+                    )}
+                  />
+                  <MenuPopup align="start">
                     {renderDropdownItems(item.items)}
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                  </MenuPopup>
+                </Menu>
               </SidebarMenuItem>
             );
           }
 
           // Normal collapsible when sidebar is expanded
           return item.items && item.items.length > 0 ? (
-            <Collapsible
-              asChild
-              className="group/collapsible"
-              defaultOpen={item.isActive || isActive}
-              key={item.title}
-            >
-              <SidebarMenuItem>
-                <CollapsibleTrigger asChild>
-                  <SidebarMenuButton isActive={isActive} tooltip={item.title}>
-                    {item.icon && <item.icon />}
-                    <span>{item.title}</span>
-                    <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                  </SidebarMenuButton>
-                </CollapsibleTrigger>
+            <SidebarMenuItem key={item.title}>
+              <Collapsible
+                className="group/collapsible"
+                defaultOpen={item.isActive || isActive}
+              >
+                <CollapsibleTrigger
+                  render={(props) => (
+                    <SidebarMenuButton
+                      isActive={isActive}
+                      tooltip={item.title}
+                      {...props}
+                    >
+                      {item.icon && <item.icon />}
+                      <span>{item.title}</span>
+                      <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                    </SidebarMenuButton>
+                  )}
+                />
                 <CollapsibleContent>
                   <SidebarMenuSub>
                     {item.items?.map((subItem) => {
@@ -143,32 +155,32 @@ export function NavMain({
                       return (
                         <SidebarMenuSubItem key={subItem.title}>
                           <SidebarMenuSubButton
-                            asChild
                             isActive={isSubItemActive}
-                          >
-                            <Link to={subItem.url}>
-                              <span>{subItem.title}</span>
-                            </Link>
-                          </SidebarMenuSubButton>
+                            render={(props) => (
+                              <Link to={subItem.url} {...props}>
+                                <span>{subItem.title}</span>
+                              </Link>
+                            )}
+                          />
                         </SidebarMenuSubItem>
                       );
                     })}
                   </SidebarMenuSub>
                 </CollapsibleContent>
-              </SidebarMenuItem>
-            </Collapsible>
+              </Collapsible>
+            </SidebarMenuItem>
           ) : (
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton
-                asChild
                 isActive={isActive}
+                render={(props) => (
+                  <Link to={item.url} {...props}>
+                    {item.icon && <item.icon />}
+                    <span>{item.title}</span>
+                  </Link>
+                )}
                 tooltip={item.title}
-              >
-                <Link to={item.url}>
-                  {item.icon && <item.icon />}
-                  <span>{item.title}</span>
-                </Link>
-              </SidebarMenuButton>
+              />
             </SidebarMenuItem>
           );
         })}

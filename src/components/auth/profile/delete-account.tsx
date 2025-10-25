@@ -93,11 +93,13 @@ export function DeleteAccount() {
           }}
           open={dialogOpen}
         >
-          <AlertDialogTrigger asChild>
-            <Button className="w-full" variant="destructive">
-              Delete account
-            </Button>
-          </AlertDialogTrigger>
+          <AlertDialogTrigger
+            render={(props) => (
+              <Button className="w-full" variant="destructive" {...props}>
+                Delete account
+              </Button>
+            )}
+          />
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle className="flex items-center gap-2">

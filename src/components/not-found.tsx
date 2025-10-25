@@ -38,12 +38,15 @@ export function NotFound({ children }: { children?: React.ReactNode }) {
                 <ArrowLeft className="h-4 w-4" />
                 Go Back
               </Button>
-              <Button asChild variant="outline">
-                <Link className="flex items-center gap-2" to="/">
-                  <Home className="h-4 w-4" />
-                  Home
-                </Link>
-              </Button>
+              <Button
+                render={(props) => (
+                  <Link className="flex items-center gap-2" to="/" {...props}>
+                    <Home className="h-4 w-4" />
+                    Home
+                  </Link>
+                )}
+                variant="outline"
+              />
             </div>
 
             {/* Help text */}

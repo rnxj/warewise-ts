@@ -8,12 +8,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { Menu, MenuItem, MenuPopup, MenuTrigger } from '@/components/ui/menu';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 // Regex patterns moved to top level for performance
@@ -119,9 +114,13 @@ export function RouteBreadcrumb() {
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink asChild>
-            <Link to="/dashboard">Home</Link>
-          </BreadcrumbLink>
+          <BreadcrumbLink
+            render={(props) => (
+              <Link to="/dashboard" {...props}>
+                Home
+              </Link>
+            )}
+          />
         </BreadcrumbItem>
         {allBreadcrumbItems.length > 0 && <BreadcrumbSeparator />}
 
@@ -133,9 +132,13 @@ export function RouteBreadcrumb() {
                 <BreadcrumbPage>{item.label}</BreadcrumbPage>
               ) : (
                 <>
-                  <BreadcrumbLink asChild>
-                    <Link to={item.path}>{item.label}</Link>
-                  </BreadcrumbLink>
+                  <BreadcrumbLink
+                    render={(props) => (
+                      <Link to={item.path} {...props}>
+                        {item.label}
+                      </Link>
+                    )}
+                  />
                   <BreadcrumbSeparator />
                 </>
               )}
@@ -149,19 +152,24 @@ export function RouteBreadcrumb() {
             {dropdownItems.length > 0 && (
               <>
                 <BreadcrumbItem>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger className="flex items-center gap-1">
+                  <Menu>
+                    <MenuTrigger className="flex items-center gap-1">
                       <BreadcrumbEllipsis className="size-4" />
                       <span className="sr-only">Toggle menu</span>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="start">
+                    </MenuTrigger>
+                    <MenuPopup align="start">
                       {dropdownItems.map((item) => (
-                        <DropdownMenuItem asChild key={item.path}>
-                          <Link to={item.path}>{item.label}</Link>
-                        </DropdownMenuItem>
+                        <MenuItem
+                          key={item.path}
+                          render={(props) => (
+                            <Link to={item.path} {...props}>
+                              {item.label}
+                            </Link>
+                          )}
+                        />
                       ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                    </MenuPopup>
+                  </Menu>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
               </>
