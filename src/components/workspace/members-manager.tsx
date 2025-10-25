@@ -39,18 +39,16 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+  Field,
+  FieldControl,
+  FieldError,
+  FieldLabel,
+} from '@/components/ui/field';
+import { Form } from '@/components/ui/form';
 import {
   Select,
-  SelectContent,
   SelectItem,
+  SelectPopup,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
@@ -69,7 +67,7 @@ const inviteMemberSchema = z.object({
   role: z.enum(['owner', 'biller', 'inventoryManager']),
 });
 
-type InviteMemberFormData = z.infer<typeof inviteMemberSchema>;
+type InviteFormData = z.infer<typeof inviteMemberSchema>;
 type MembersResponse = Awaited<
   ReturnType<typeof authClient.organization.listMembers>
 >;
@@ -77,13 +75,17 @@ type Member = NonNullable<MembersResponse['data']>['members'][number];
 
 export function MembersManager() {
   const [members, setMembers] = useState<Member[]>([]);
-  const [isInviting, setIsInviting] = useState(false);
   const [isLoadingMembers, setIsLoadingMembers] = useState(false);
   const [isInviteDialogOpen, setIsInviteDialogOpen] = useState(false);
   const { data: activeOrg } = authClient.useActiveOrganization();
   const orgId = activeOrg?.id;
 
-  const inviteForm = useForm<InviteMemberFormData>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm<InviteFormData>({
     resolver: zodResolver(inviteMemberSchema),
     defaultValues: {
       email: '',
@@ -115,8 +117,7 @@ export function MembersManager() {
     loadMembers();
   }, [loadMembers, orgId]);
 
-  const onInviteSubmit = async (data: InviteMemberFormData) => {
-    setIsInviting(true);
+  const onInviteSubmit = async (data: InviteFormData) => {
     try {
       const { error } = await authClient.organization.inviteMember({
         email: data.email,
@@ -129,12 +130,10 @@ export function MembersManager() {
       }
 
       toast.success('Invitation sent successfully!');
-      inviteForm.reset();
       setIsInviteDialogOpen(false);
+      reset(); // Reset form after successful submission
     } catch (_error) {
       toast.error('Failed to send invitation');
-    } finally {
-      setIsInviting(false);
     }
   };
 
@@ -203,6 +202,13 @@ export function MembersManager() {
       .toUpperCase()
       .slice(0, 2);
 
+  const roleItems = [
+    { label: 'Select a role', value: null },
+    { label: 'Inventory Manager', value: 'inventoryManager' },
+    { label: 'Biller', value: 'biller' },
+    { label: 'Owner', value: 'owner' },
+  ];
+
   return (
     <div className="overflow-hidden rounded-md border bg-background">
       <div className="border-b bg-muted/50 px-6 py-4">
@@ -239,74 +245,54 @@ export function MembersManager() {
                   address and selecting their role.
                 </DialogDescription>
               </DialogHeader>
-              <Form {...inviteForm}>
-                <form
-                  className="space-y-4"
-                  onSubmit={inviteForm.handleSubmit(onInviteSubmit)}
-                >
-                  <FormField
-                    control={inviteForm.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Email address</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="Enter email address"
-                            type="email"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
+              <Form
+                className="space-y-4"
+                onSubmit={handleSubmit(onInviteSubmit)}
+              >
+                <Field name="email">
+                  <FieldLabel>Email address</FieldLabel>
+                  <FieldControl
+                    {...register('email')}
+                    disabled={isSubmitting}
+                    placeholder="Enter email address"
+                    type="email"
                   />
+                  <FieldError>{errors.email?.message}</FieldError>
+                </Field>
 
-                  <FormField
-                    control={inviteForm.control}
-                    name="role"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Role</FormLabel>
-                        <FormControl>
-                          <Select
-                            defaultValue={field.value}
-                            onValueChange={field.onChange}
-                          >
-                            <SelectTrigger>
-                              <SelectValue>
-                                {field.value
-                                  ? getRoleLabel(field.value)
-                                  : 'Select role'}
-                              </SelectValue>
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="inventoryManager">
-                                Inventory Manager
-                              </SelectItem>
-                              <SelectItem value="biller">Biller</SelectItem>
-                              <SelectItem value="owner">Owner</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                <Field name="role">
+                  <FieldLabel>Role</FieldLabel>
+                  <Select
+                    {...register('role')}
+                    disabled={isSubmitting}
+                    items={roleItems}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectPopup>
+                      {roleItems.map(({ label, value }) => (
+                        <SelectItem key={value} value={value}>
+                          {label}
+                        </SelectItem>
+                      ))}
+                    </SelectPopup>
+                  </Select>
+                  <FieldError>{errors.role?.message}</FieldError>
+                </Field>
 
-                  <DialogFooter>
-                    <Button
-                      onClick={() => setIsInviteDialogOpen(false)}
-                      type="button"
-                      variant="outline"
-                    >
-                      Cancel
-                    </Button>
-                    <Button disabled={isInviting} type="submit">
-                      {isInviting ? 'Inviting...' : 'Send Invitation'}
-                    </Button>
-                  </DialogFooter>
-                </form>
+                <DialogFooter>
+                  <Button
+                    onClick={() => setIsInviteDialogOpen(false)}
+                    type="button"
+                    variant="outline"
+                  >
+                    Cancel
+                  </Button>
+                  <Button disabled={isSubmitting} type="submit">
+                    {isSubmitting ? 'Inviting...' : 'Send Invitation'}
+                  </Button>
+                </DialogFooter>
               </Form>
             </DialogContent>
           </Dialog>

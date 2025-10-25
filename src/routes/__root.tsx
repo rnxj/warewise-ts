@@ -11,11 +11,11 @@ import {
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 import type { TRPCOptionsProxy } from '@trpc/tanstack-react-query';
 import type * as React from 'react';
-import { Toaster } from 'sonner';
 import type { AppRouter } from '@/api/routers/index';
 import { DefaultCatchBoundary } from '@/components/default-catch-boundary';
 import { NotFound } from '@/components/not-found';
 import { ThemeProvider } from '@/components/theme/provider';
+import { Toaster } from '@/components/ui/sonner';
 import type { authClient } from '@/lib/auth/client';
 import appCss from '@/styles.css?url';
 import { seo } from '@/utils/seo';
@@ -86,6 +86,7 @@ function RootComponent() {
         enableSystem
       >
         <Outlet />
+        <Toaster richColors />
       </ThemeProvider>
     </RootDocument>
   );
@@ -99,7 +100,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         {children}
-        <Toaster richColors />
         <TanStackRouterDevtools position="bottom-right" />
         <ReactQueryDevtools buttonPosition="bottom-left" />
         <Scripts />

@@ -1,6 +1,9 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2, Pencil } from 'lucide-react';
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+import { z } from 'zod';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
@@ -12,9 +15,21 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import {
+  Field,
+  FieldControl,
+  FieldError,
+  FieldLabel,
+} from '@/components/ui/field';
+import { Form } from '@/components/ui/form';
 import { authClient } from '@/lib/auth/client';
+
+const updateUserSchema = z.object({
+  name: z.string().min(1, 'Name is required'),
+  email: z.string().email('Please enter a valid email address'),
+});
+
+type FormData = z.infer<typeof updateUserSchema>;
 
 interface UpdateUserInfoProps {
   initialName?: string;
@@ -28,72 +43,66 @@ export function UpdateUserInfo({
   initialImage = null,
 }: UpdateUserInfoProps) {
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [name, setName] = useState(initialName);
-  const [email, setEmail] = useState(initialEmail);
-  const [isUpdatingName, setIsUpdatingName] = useState(false);
-  const [isUpdatingEmail, setIsUpdatingEmail] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting, isDirty },
+    reset,
+  } = useForm<FormData>({
+    resolver: zodResolver(updateUserSchema),
+    defaultValues: {
+      name: initialName,
+      email: initialEmail,
+    },
+  });
 
-  const handleUpdateName = async () => {
-    if (name === initialName) {
-      toast.info('Name is the same as before');
-      return;
-    }
-
-    setIsUpdatingName(true);
-    try {
-      await authClient.updateUser({
-        name,
-      });
-      toast.success('Name updated successfully');
-      setDialogOpen(false);
-    } catch {
-      toast.error('Failed to update name');
-    } finally {
-      setIsUpdatingName(false);
-    }
-  };
-
-  const handleChangeEmail = async () => {
-    if (email === initialEmail) {
-      toast.info('Email is the same as before');
-      return;
-    }
-
-    setIsUpdatingEmail(true);
-    try {
-      await authClient.changeEmail({
-        newEmail: email,
-        callbackURL: '/profile',
-      });
-      toast.success('Email updated successfully');
-      setDialogOpen(false);
-    } catch {
-      toast.error('Failed to update email');
-    } finally {
-      setIsUpdatingEmail(false);
-    }
-  };
-
-  const handleSave = async () => {
+  const onSubmit = async (data: FormData) => {
     const promises: Promise<void>[] = [];
 
-    if (name !== initialName) {
-      promises.push(handleUpdateName());
+    if (data.name !== initialName) {
+      promises.push(
+        authClient
+          .updateUser({
+            name: data.name,
+          })
+          .then(() => {
+            toast.success('Name updated successfully');
+          })
+          .catch(() => {
+            toast.error('Failed to update name');
+          })
+      );
     }
 
-    if (email !== initialEmail) {
-      promises.push(handleChangeEmail());
+    if (data.email !== initialEmail) {
+      promises.push(
+        authClient
+          .changeEmail({
+            newEmail: data.email,
+            callbackURL: '/profile',
+          })
+          .then(() => {
+            toast.success('Email updated successfully');
+          })
+          .catch(() => {
+            toast.error('Failed to update email');
+          })
+      );
     }
 
     if (promises.length > 0) {
-      await Promise.all(promises);
+      try {
+        await Promise.all(promises);
+        setDialogOpen(false);
+        reset(data); // Reset form with new values
+      } catch {
+        // Errors are already handled above
+      }
     } else {
+      toast.info('No changes to save');
       setDialogOpen(false);
     }
   };
-
-  const isUpdating = isUpdatingName || isUpdatingEmail;
-  const hasChanges = name !== initialName || email !== initialEmail;
 
   return (
     <div className="space-y-4">
@@ -115,46 +124,51 @@ export function UpdateUserInfo({
                 Update your personal information
               </DialogDescription>
             </DialogHeader>
-            <div className="space-y-4 py-4">
-              <div className="space-y-2">
-                <Label htmlFor="name">Name</Label>
-                <Input
+            <Form onSubmit={handleSubmit(onSubmit)}>
+              <Field name="name">
+                <FieldLabel htmlFor="name">Name</FieldLabel>
+                <FieldControl
+                  {...register('name')}
+                  disabled={isSubmitting}
                   id="name"
-                  onChange={(e) => setName(e.target.value)}
                   placeholder="Enter your name"
-                  value={name}
                 />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
+                <FieldError>{errors.name?.message}</FieldError>
+              </Field>
+
+              <Field name="email">
+                <FieldLabel htmlFor="email">Email</FieldLabel>
+                <FieldControl
+                  {...register('email')}
+                  disabled={isSubmitting}
                   id="email"
-                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email"
                   type="email"
-                  value={email}
                 />
-              </div>
-            </div>
-            <DialogFooter>
-              <Button
-                disabled={isUpdating}
-                onClick={() => setDialogOpen(false)}
-                variant="outline"
-              >
-                Cancel
-              </Button>
-              <Button disabled={isUpdating || !hasChanges} onClick={handleSave}>
-                {isUpdating ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Saving...
-                  </>
-                ) : (
-                  'Save changes'
-                )}
-              </Button>
-            </DialogFooter>
+                <FieldError>{errors.email?.message}</FieldError>
+              </Field>
+
+              <DialogFooter>
+                <Button
+                  disabled={isSubmitting}
+                  onClick={() => setDialogOpen(false)}
+                  type="button"
+                  variant="outline"
+                >
+                  Cancel
+                </Button>
+                <Button disabled={isSubmitting || !isDirty} type="submit">
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Saving...
+                    </>
+                  ) : (
+                    'Save changes'
+                  )}
+                </Button>
+              </DialogFooter>
+            </Form>
           </DialogContent>
         </Dialog>
       </div>

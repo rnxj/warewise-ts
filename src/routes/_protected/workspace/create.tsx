@@ -1,8 +1,7 @@
-import { zodResolver } from '@hookform/resolvers/zod';
 import { createFileRoute, useRouter } from '@tanstack/react-router';
 import { GalleryVerticalEnd } from 'lucide-react';
+import type React from 'react';
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
@@ -14,15 +13,13 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { ImageUploader } from '@/components/ui/image-uploader';
-import { Input } from '@/components/ui/input';
+  Field,
+  FieldControl,
+  FieldError,
+  FieldLabel,
+} from '@/components/ui/field';
+import { Form } from '@/components/ui/form';
+import { FormImageUploader } from '@/components/ui/form-image-uploader';
 import { siteConfig } from '@/config/site';
 import { authClient } from '@/lib/auth/client';
 
@@ -35,46 +32,50 @@ const createWorkspaceSchema = z.object({
     .string()
     .min(2, 'Workspace name must be at least 2 characters')
     .max(50, 'Workspace name must be less than 50 characters'),
-  logo: z
-    .string()
-    .optional()
-    .refine((logo) => {
-      if (!logo) {
-        return true;
-      }
-      // Check if it's a valid base64 data URL
-      if (!logo.startsWith('data:image/')) {
-        return false;
-      }
-      // Check size (roughly 100KB limit for base64)
-      const base64 = logo.split(',')[1];
-      if (!base64) {
-        return false;
-      }
-      const sizeInBytes = (base64.length * 3) / 4;
-      return sizeInBytes <= 100 * 1024; // 100KB
-    }, 'Logo must be a valid image under 100KB'),
+  logo: z.string().optional(),
 });
 
-type CreateWorkspaceFormData = z.infer<typeof createWorkspaceSchema>;
+type Errors = Record<string, string | string[]>;
+
+function submitForm(event: React.FormEvent<HTMLFormElement>) {
+  event.preventDefault();
+
+  const formData = new FormData(event.currentTarget);
+  const data = Object.fromEntries(formData);
+
+  const result = createWorkspaceSchema.safeParse(data);
+
+  if (!result.success) {
+    const { fieldErrors } = z.flattenError(result.error);
+    return { errors: fieldErrors as Errors };
+  }
+
+  return {
+    errors: {} as Errors,
+    data: { ...result.data, logo: (data.logo as string) || '' },
+  };
+}
 
 function CreateWorkspacePage() {
   const router = useRouter();
   const [isCreating, setIsCreating] = useState(false);
+  const [errors, setErrors] = useState<Errors>({});
+  const handleClearErrors = (next: Errors) => setErrors(next);
 
-  const form = useForm<CreateWorkspaceFormData>({
-    resolver: zodResolver(createWorkspaceSchema),
-    defaultValues: {
-      name: '',
-      logo: '',
-    },
-  });
-
-  const onSubmit = async (data: CreateWorkspaceFormData) => {
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     setIsCreating(true);
+    const response = await submitForm(event);
+
+    if (Object.keys(response.errors).length > 0) {
+      setErrors(response.errors);
+      setIsCreating(false);
+      return;
+    }
+
+    const data = response.data;
     try {
       // Generate slug from name automatically
-      const slug = data.name
+      const slug = data?.name
         .toLowerCase()
         .replace(/[^a-z0-9\s-]/g, '')
         .replace(/\s+/g, '-')
@@ -83,9 +84,9 @@ function CreateWorkspacePage() {
 
       const { data: organization, error } =
         await authClient.organization.create({
-          name: data.name,
-          slug,
-          logo: data.logo || undefined,
+          name: data?.name || '',
+          slug: slug || '',
+          logo: data?.logo || undefined,
         });
 
       if (error) {
@@ -131,57 +132,37 @@ function CreateWorkspacePage() {
             </CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col gap-4">
-            <Form {...form}>
-              <form
-                className="space-y-4"
-                onSubmit={form.handleSubmit(onSubmit)}
-              >
-                <FormField
-                  control={form.control}
-                  name="logo"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="sr-only">Logo</FormLabel>
-                      <FormControl>
-                        <ImageUploader
-                          onChange={field.onChange}
-                          size="lg"
-                          value={field.value}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+            <Form
+              className="space-y-4"
+              errors={errors}
+              onClearErrors={handleClearErrors}
+              onSubmit={onSubmit}
+            >
+              <FormImageUploader
+                disabled={isCreating}
+                name="logo"
+                placeholder="Upload logo (max 100KB)"
+                size="lg"
+              />
 
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem className="space-y-1">
-                      <FormLabel>Workspace name</FormLabel>
-                      <FormControl>
-                        <Input
-                          autoFocus
-                          className="bg-card dark:bg-background"
-                          disabled={isCreating}
-                          placeholder="eg: My Company"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <Button
-                  className="mt-3 w-full"
+              <Field name="name">
+                <FieldLabel>Workspace name</FieldLabel>
+                <FieldControl
+                  autoFocus
+                  className="bg-card dark:bg-background"
                   disabled={isCreating}
-                  type="submit"
-                >
-                  {isCreating ? 'Creating workspace...' : 'Create workspace'}
-                </Button>
-              </form>
+                  placeholder="eg: My Company"
+                />
+                <FieldError />
+              </Field>
+
+              <Button
+                className="mt-3 w-full"
+                disabled={isCreating}
+                type="submit"
+              >
+                {isCreating ? 'Creating workspace...' : 'Create workspace'}
+              </Button>
             </Form>
           </CardContent>
         </Card>

@@ -1,12 +1,15 @@
 import { CheckIcon, EyeIcon, EyeOffIcon, XIcon } from 'lucide-react';
 import { useId, useMemo, useState } from 'react';
 
+import { Button } from '@/components/ui/button';
+import { Group, GroupItem } from '@/components/ui/group';
 import { Input } from '@/components/ui/input';
 
 export type PasswordInputProps = {
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   id?: string;
+  disabled?: boolean;
 };
 
 const requirements = [
@@ -17,9 +20,10 @@ const requirements = [
 ];
 
 export default function PasswordInput({
-  value,
+  value = '',
   onChange,
   id: idProp,
+  disabled = false,
 }: PasswordInputProps) {
   const id = useId();
   const inputId = idProp || id;
@@ -76,31 +80,43 @@ export default function PasswordInput({
     <div>
       {/* Password input field with toggle visibility button */}
       <div className="*:not-first:mt-2">
-        <div className="relative">
-          <Input
-            aria-describedby={`${inputId}-description`}
-            className="pe-9"
-            id={inputId}
-            onChange={onChange}
-            placeholder="Password"
-            type={isVisible ? 'text' : 'password'}
-            value={value}
+        <Group className="w-full">
+          <GroupItem
+            className="flex-1"
+            render={
+              <Input
+                aria-describedby={`${inputId}-description`}
+                disabled={disabled}
+                id={inputId}
+                name="password"
+                onChange={onChange}
+                placeholder="Password"
+                type={isVisible ? 'text' : 'password'}
+                value={value}
+              />
+            }
           />
-          <button
-            aria-controls="password"
-            aria-label={isVisible ? 'Hide password' : 'Show password'}
-            aria-pressed={isVisible}
-            className="absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-md text-muted-foreground/80 outline-none transition-[color,box-shadow] hover:text-foreground focus:z-10 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
-            onClick={toggleVisibility}
-            type="button"
+          <GroupItem
+            render={
+              <Button
+                aria-controls="password"
+                aria-label={isVisible ? 'Hide password' : 'Show password'}
+                aria-pressed={isVisible}
+                disabled={disabled}
+                onClick={toggleVisibility}
+                size="icon"
+                type="button"
+                variant="outline"
+              />
+            }
           >
             {isVisible ? (
               <EyeOffIcon aria-hidden="true" size={16} />
             ) : (
               <EyeIcon aria-hidden="true" size={16} />
             )}
-          </button>
-        </div>
+          </GroupItem>
+        </Group>
       </div>
 
       {/* Password strength indicator and requirements - only show if needed */}

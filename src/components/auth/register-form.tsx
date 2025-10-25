@@ -1,103 +1,105 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from '@tanstack/react-router';
-import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
-import { FormError, FormSuccess } from '@/components/ui/form-messages';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import {
+  Field,
+  FieldControl,
+  FieldError,
+  FieldLabel,
+} from '@/components/ui/field';
+import { Form } from '@/components/ui/form';
 import { authClient } from '@/lib/auth/client';
 import { type RegisterSchema, registerSchema } from '@/lib/schemas/auth';
 import PasswordInput from './password-input';
 
 const RegisterForm = () => {
-  const [formState, setFormState] = React.useState<{
-    success?: string;
-    error?: string;
-  }>({});
-
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
     control,
-  } = useForm({
+  } = useForm<RegisterSchema>({
     resolver: zodResolver(registerSchema),
     defaultValues: { name: '', email: '', password: '' },
   });
   const router = useRouter();
 
   const onSubmit = async (data: RegisterSchema) => {
-    setFormState({});
-    const result = await authClient.signUp.email({
-      email: data.email,
-      password: data.password,
-      name: data.name,
-    });
-    if (result.data) {
-      setFormState({ success: 'Registration successful' });
+    try {
+      const result = await authClient.signUp.email({
+        email: data.email,
+        password: data.password,
+        name: data.name,
+      });
+
+      if (result.error) {
+        toast.error(result.error.message || 'Registration failed');
+        return;
+      }
+
+      toast.success('Registration successful');
       router.navigate({ to: '/dashboard' });
-    } else if (result.error) {
-      setFormState({ error: result.error.message || 'An error occurred' });
+    } catch (error) {
+      toast.error('Registration failed', {
+        description: (error as Error).message,
+      });
     }
   };
 
   return (
-    <form
+    <Form
       className="flex w-full flex-col gap-5"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <FormSuccess message={formState.success || ''} />
-      <FormError message={formState.error || ''} />
-      <div className="flex flex-col gap-2">
-        <Label htmlFor="name">Name</Label>
-        <Input
+      <Field name="name">
+        <FieldLabel htmlFor="name">Name</FieldLabel>
+        <FieldControl
+          {...register('name')}
           autoComplete="name"
+          disabled={isSubmitting}
           id="name"
           placeholder="Your name"
           type="text"
-          {...register('name')}
         />
-        {errors.name && (
-          <span className="text-red-500 text-xs">{errors.name.message}</span>
-        )}
-      </div>
-      <div className="flex flex-col gap-2">
-        <Label htmlFor="email">Email</Label>
-        <Input
+        <FieldError>{errors.name?.message}</FieldError>
+      </Field>
+
+      <Field name="email">
+        <FieldLabel htmlFor="email">Email</FieldLabel>
+        <FieldControl
+          {...register('email')}
           autoComplete="email"
+          disabled={isSubmitting}
           id="email"
           placeholder="you@example.com"
           type="email"
-          {...register('email')}
         />
-        {errors.email && (
-          <span className="text-red-500 text-xs">{errors.email.message}</span>
-        )}
-      </div>
-      <div className="flex flex-col gap-2">
-        <Label htmlFor="password">Password</Label>
+        <FieldError>{errors.email?.message}</FieldError>
+      </Field>
+
+      <Field name="password">
+        <FieldLabel htmlFor="password">Password</FieldLabel>
         <Controller
           control={control}
           name="password"
           render={({ field }) => (
             <PasswordInput
+              disabled={isSubmitting}
               id="password"
               onChange={field.onChange}
               value={field.value}
             />
           )}
         />
-        {errors.password && (
-          <span className="text-red-500 text-xs">
-            {errors.password.message}
-          </span>
-        )}
-      </div>
+        <FieldError>{errors.password?.message}</FieldError>
+      </Field>
+
       <Button className="mt-2 w-full" disabled={isSubmitting} type="submit">
         {isSubmitting ? 'Registering...' : 'Register'}
       </Button>
-    </form>
+    </Form>
   );
 };
 

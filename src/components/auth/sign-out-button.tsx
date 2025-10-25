@@ -88,7 +88,7 @@ export function SignOutButton({
           className
         )}
         disabled={isSigningOut}
-        onSelect={(event) => handleSignOut(event.nativeEvent as Event)}
+        onClick={() => handleSignOut()}
       >
         {content}
       </MenuItem>
