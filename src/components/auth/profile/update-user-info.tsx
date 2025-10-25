@@ -102,7 +102,7 @@ export function UpdateUserInfo({
         <Dialog onOpenChange={setDialogOpen} open={dialogOpen}>
           <DialogTrigger
             render={(props) => (
-              <Button size="sm" variant="ghost" {...props}>
+              <Button variant="ghost" {...props}>
                 <Pencil className="mr-2 h-4 w-4" />
                 Edit user
               </Button>

@@ -188,7 +188,6 @@ export function UpdateWorkspaceInfo({
                     <ImageUploader
                       onChange={(value) => field.onChange(value || '')}
                       placeholder="Upload logo (max 100KB)"
-                      size="sm"
                       value={field.value}
                     />
                   </FormControl>

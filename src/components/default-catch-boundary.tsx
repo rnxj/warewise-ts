@@ -105,7 +105,6 @@ export function DefaultCatchBoundary({ error }: ErrorComponentProps) {
                 render={(props) => (
                   <Button
                     className="flex items-center gap-2 text-muted-foreground hover:text-foreground"
-                    size="sm"
                     variant="ghost"
                     {...props}
                   >
@@ -139,7 +138,6 @@ export function DefaultCatchBoundary({ error }: ErrorComponentProps) {
               <Button
                 className="flex items-center gap-2"
                 onClick={handleReportError}
-                size="sm"
                 variant="outline"
               >
                 <Mail className="h-4 w-4" />

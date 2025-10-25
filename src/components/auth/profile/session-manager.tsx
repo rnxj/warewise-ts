@@ -230,7 +230,6 @@ export function SessionManager() {
             <Button
               className="text-destructive hover:text-destructive"
               onClick={() => setSessionToRevoke(currentSessionItem)}
-              size="sm"
               variant="ghost"
             >
               {getSessionActionText(currentSessionItem.id)}
@@ -259,7 +258,6 @@ export function SessionManager() {
             <Button
               className="text-destructive hover:text-destructive"
               onClick={() => setSessionToRevoke(session)}
-              size="sm"
               variant="ghost"
             >
               {getSessionActionText(session.id)}

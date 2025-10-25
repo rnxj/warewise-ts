@@ -275,7 +275,6 @@ export function InvitationsManager() {
                       <>
                         <Button
                           onClick={() => handleShareInvitation(invitation.id)}
-                          size="sm"
                           title={
                             copiedInvitationId === invitation.id
                               ? 'Copied!'
@@ -291,7 +290,6 @@ export function InvitationsManager() {
                         </Button>
                         <Button
                           onClick={() => handleCancelInvitation(invitation.id)}
-                          size="sm"
                           title="Cancel invitation"
                           variant="ghost"
                         >

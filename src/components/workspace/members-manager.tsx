@@ -370,7 +370,7 @@ export function MembersManager() {
                     <AlertDialog>
                       <AlertDialogTrigger
                         render={(props) => (
-                          <Button size="sm" variant="ghost" {...props}>
+                          <Button variant="ghost" {...props}>
                             <Trash2 className="h-4 w-4" />
                           </Button>
                         )}

@@ -63,7 +63,6 @@ export const HeroHeader = () => {
                     <span>GitHub</span>
                   </a>
                 )}
-                size="sm"
                 variant="ghost"
               />
               <ModeToggle />
@@ -74,7 +73,6 @@ export const HeroHeader = () => {
                     <span>Login</span>
                   </Link>
                 )}
-                size="sm"
                 variant="outline"
               />
               <Button
@@ -83,7 +81,6 @@ export const HeroHeader = () => {
                     <span>Get Started</span>
                   </Link>
                 )}
-                size="sm"
               />
             </div>
 
@@ -92,12 +89,7 @@ export const HeroHeader = () => {
               <Popover>
                 <PopoverTrigger
                   render={(props) => (
-                    <Button
-                      aria-label="Open Menu"
-                      size="sm"
-                      variant="ghost"
-                      {...props}
-                    >
+                    <Button aria-label="Open Menu" variant="ghost" {...props}>
                       <Menu className="h-5 w-5" />
                     </Button>
                   )}
@@ -116,7 +108,6 @@ export const HeroHeader = () => {
                           <span>Login</span>
                         </Link>
                       )}
-                      size="sm"
                       variant="outline"
                     />
                     <Button
@@ -126,7 +117,6 @@ export const HeroHeader = () => {
                           <span>Get Started</span>
                         </Link>
                       )}
-                      size="sm"
                     />
                     <Button
                       className="w-full"
@@ -141,7 +131,6 @@ export const HeroHeader = () => {
                           <span>GitHub</span>
                         </a>
                       )}
-                      size="sm"
                       variant="outline"
                     />
                   </div>
